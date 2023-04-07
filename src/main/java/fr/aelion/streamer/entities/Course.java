@@ -8,7 +8,7 @@ import java.time.LocalDate;
 import java.util.Set;
 
 @Entity
-@Table(name="course")
+@Table(name = "course")
 @Getter
 @Setter
 public class Course {
@@ -18,6 +18,7 @@ public class Course {
     @Column(nullable = false)
     private String title;
 
+    @Column(nullable = false)
     private LocalDate createdAt;
 
     private LocalDate updatedAt;
@@ -26,6 +27,12 @@ public class Course {
 
     @OneToMany(mappedBy = "course")
     private Set<Module> modules;
+
+    private Boolean publish;
+
+    @ManyToOne(targetEntity = Student.class)
+    @JoinColumn(name = "personne_id")
+    private Student student;
 
     public Course() {
         this.createdAt = LocalDate.now();

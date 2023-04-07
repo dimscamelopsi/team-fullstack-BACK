@@ -22,7 +22,10 @@ public class FullCourseDto {
 
     private String objective;
 
+    private Boolean publish;
+
     private Set<ModuleDto> modules = new HashSet<>();
+
 
 
 }

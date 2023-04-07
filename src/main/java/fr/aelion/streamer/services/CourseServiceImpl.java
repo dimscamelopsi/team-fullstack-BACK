@@ -69,7 +69,7 @@ public class CourseServiceImpl implements CourseService {
             // 1. Update all medias of all modules to null module
             for (Module module : oCourse.get().getModules()) {
                 for (Media media : module.getMedias()) {
-                    media.setModule(null);
+                    media.setModules(null);
                     mediaRepository.save(media);
                 }
                 moduleRepository.delete(module);

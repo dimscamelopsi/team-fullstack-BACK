@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
 @Table(name = "media")
@@ -32,9 +33,8 @@ public class Media {
     @JoinColumn(name = "typemedia_id", nullable = false)
     private TypeMedia typeMedia;
 
-    @ManyToOne
-    @JoinColumn(name = "module_id", nullable = true)
-    private Module module;
+    @ManyToMany(mappedBy = "medias")
+    private List<Module> modules;
 
     public Media() {
         createdAt = LocalDate.now();
