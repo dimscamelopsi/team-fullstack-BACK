@@ -3,19 +3,18 @@ package fr.aelion.streamer.services;
 import fr.aelion.streamer.dto.AddStudentDto;
 import fr.aelion.streamer.dto.SimpleStudentDto;
 import fr.aelion.streamer.dto.SimpleStudentProjection;
+import fr.aelion.streamer.dto.StudentDto;
 import fr.aelion.streamer.entities.Student;
-import fr.aelion.streamer.entities.User;
 import fr.aelion.streamer.repositories.StudentRepository;
 import fr.aelion.streamer.services.exceptions.EmailAlreadyExistsException;
 import fr.aelion.streamer.services.exceptions.LoginAlreadyExistsException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
+
 
 @Service
 public class StudentService {
@@ -25,8 +24,15 @@ public class StudentService {
     @Autowired
     private ModelMapper modelMapper;
 
-    public List<Student> findAll() {
-        List<Student> students = repository.findAll();
+    public List<StudentDto> findAll() {
+        var students = repository.findAll()
+                .stream()
+                .map(student -> {
+                    var studentDto = modelMapper.map(student, StudentDto.class);
+                    return studentDto;
+                })
+                .collect(Collectors.toList());
+
         return students;
     }
 
@@ -49,7 +55,7 @@ public class StudentService {
     }
 
     public Student add(AddStudentDto student) throws Exception {
-       Student anyStudent = repository.findByEmail(student.getEmail());
+        Student anyStudent = repository.findByEmail(student.getEmail());
         if (anyStudent != null) {
             throw new EmailAlreadyExistsException("Email " + student.getEmail() + " already exists");
         }
@@ -66,10 +72,11 @@ public class StudentService {
     public void update(Student student) throws Exception {
         try {
             repository.save(student);
-        } catch(Exception e) {
+        } catch (Exception e) {
             throw new Exception("Something went wrong while updating Student");
         }
     }
+
     public Student findOne(int id) {
         return repository.findById(id)
                 .map(s -> s)
@@ -91,7 +98,7 @@ public class StudentService {
                 .forEach(i -> {
                     try {
                         repository.delete(this.findOne(i));
-                    } catch(NoSuchElementException e) {
+                    } catch (NoSuchElementException e) {
                         nonDeletedIds.add(i);
                     } catch (Exception e) {
                         nonDeletedIds.add(i);
