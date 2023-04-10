@@ -1,5 +1,6 @@
 package fr.aelion.streamer.dto;
 
+import fr.aelion.streamer.entities.Course;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -12,6 +13,7 @@ public class ModuleDto {
     private int id;
     private String name;
     private String objective;
+    //private Course course;
 
     private Set<MediaDto> medias;
 
