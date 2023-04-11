@@ -15,13 +15,14 @@ public class ModuleService {
     @Autowired
     private ModelMapper modelMapper;
     public ModuleDto add(ModuleAddDto moduleAddDto) {
-        var newModule = new Module();
+        Module newModule = new Module();
         newModule.setName(moduleAddDto.getName());
         newModule.setObjective(moduleAddDto.getObjective());
-       // newModule.setId(moduleAddDto.getCourse().getId());
         Course course= new Course();
-        course.setId(moduleAddDto.getCourse().getId());
-        newModule.setCourse(course);
+        if(moduleAddDto.getCourse()!=null) {
+            course.setId(moduleAddDto.getCourse().getId());
+            newModule.setCourse(course);
+        }
         newModule = repository.save(newModule);
         return modelMapper.map(newModule, ModuleDto.class);
     }
