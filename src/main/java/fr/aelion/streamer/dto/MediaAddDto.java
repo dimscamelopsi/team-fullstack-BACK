@@ -1,0 +1,17 @@
+package fr.aelion.streamer.dto;
+
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDate;
+@Getter
+@Setter
+public class MediaAddDto {
+
+    private String title;
+    private String summary;
+    private Float duration;
+
+    private String url;
+    private TypeMediaDto typeMedia;
+}
