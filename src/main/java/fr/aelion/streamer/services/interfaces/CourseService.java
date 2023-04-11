@@ -15,4 +15,6 @@ public interface CourseService {
     void remove(int id);
 
     FullCourseDto add(CourseAddDto course);
+
+
 }

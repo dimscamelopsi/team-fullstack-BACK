@@ -3,6 +3,7 @@ package fr.aelion.streamer.entities;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.time.LocalDate;
 import java.util.Set;
@@ -11,6 +12,7 @@ import java.util.Set;
 @Table(name = "course")
 @Getter
 @Setter
+@ToString
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,7 +23,7 @@ public class Course {
     @Column(nullable = false)
     private LocalDate createdAt;
 
-    private LocalDate updatedAt;
+    private LocalDate updatedAt = LocalDate.now();
 
     private String objective;
 
