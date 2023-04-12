@@ -8,7 +8,6 @@ import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.repositories.CourseRepository;
 import fr.aelion.streamer.repositories.MediaRepository;
 import fr.aelion.streamer.repositories.ModuleRepository;
-import fr.aelion.streamer.repositories.StudentRepository;
 import fr.aelion.streamer.services.interfaces.CourseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -149,7 +148,4 @@ public class CourseServiceImpl implements CourseService {
 
        return newCoursList;
     }
-
-
-
 }
