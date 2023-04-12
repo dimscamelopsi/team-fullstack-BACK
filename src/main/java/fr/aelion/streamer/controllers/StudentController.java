@@ -3,6 +3,7 @@ package fr.aelion.streamer.controllers;
 import fr.aelion.streamer.dto.AddStudentDto;
 import fr.aelion.streamer.dto.SimpleStudentDto;
 import fr.aelion.streamer.dto.SimpleStudentProjection;
+import fr.aelion.streamer.dto.StudentDto;
 import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.services.exceptions.EmailAlreadyExistsException;
 import fr.aelion.streamer.services.exceptions.LoginAlreadyExistsException;
@@ -26,7 +27,7 @@ public class StudentController {
     private StudentService studentService;
 
     @GetMapping
-    public List<Student> findAll() {
+    public List<StudentDto> findAll() {
         return studentService.findAll();
     }
     @GetMapping("{id}") // GET http://127.0.0.1:5000/api/v1/students/1
