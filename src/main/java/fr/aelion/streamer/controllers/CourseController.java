@@ -1,14 +1,18 @@
 package fr.aelion.streamer.controllers;
 
 import fr.aelion.streamer.dto.CourseAddDto;
+import fr.aelion.streamer.dto.CourseUserDto;
 import fr.aelion.streamer.dto.FullCourseDto;
 import fr.aelion.streamer.entities.Course;
+import fr.aelion.streamer.entities.Student;
+import fr.aelion.streamer.repositories.CourseRepository;
 import fr.aelion.streamer.services.interfaces.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -17,6 +21,18 @@ import java.util.NoSuchElementException;
 public class CourseController {
     @Autowired
     private CourseService service;
+    @Autowired
+    private CourseRepository courseRepository;
+
+    @GetMapping("coursesforusers/{id}")
+    public ResponseEntity<?> findAllCourseUsersNative(@PathVariable int id) {
+        try {
+            return ResponseEntity.ok(service.findCoursesByStudent(id));
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<FullCourseDto> findAll() {
@@ -32,6 +48,7 @@ public class CourseController {
             return ResponseEntity.notFound().build();
         }
     }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remove(@PathVariable() int id) {
         try {
