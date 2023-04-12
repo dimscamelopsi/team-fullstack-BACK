@@ -25,7 +25,4 @@ public class FullCourseDto {
     private Boolean publish;
 
     private Set<ModuleDto> modules = new HashSet<>();
-
-
-
 }

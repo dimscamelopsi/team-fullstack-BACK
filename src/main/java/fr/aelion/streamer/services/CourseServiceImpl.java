@@ -1,15 +1,14 @@
 package fr.aelion.streamer.services;
 
-import fr.aelion.streamer.dto.CourseAddDto;
-import fr.aelion.streamer.dto.FullCourseDto;
-import fr.aelion.streamer.dto.MediaDto;
-import fr.aelion.streamer.dto.ModuleDto;
+import fr.aelion.streamer.dto.*;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.repositories.CourseRepository;
 import fr.aelion.streamer.repositories.MediaRepository;
 import fr.aelion.streamer.repositories.ModuleRepository;
+import fr.aelion.streamer.repositories.StudentRepository;
 import fr.aelion.streamer.services.interfaces.CourseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +22,8 @@ import java.util.stream.Collectors;
 public class CourseServiceImpl implements CourseService {
     @Autowired
     private CourseRepository repository;
+    @Autowired
+    private StudentRepository studentRepository;
 
     @Autowired
     private MediaRepository mediaRepository;
@@ -47,6 +48,18 @@ public class CourseServiceImpl implements CourseService {
             }
         }
         return fullCourses;
+    }
+
+    public List<FullCourseDto> getListCourseByAutor(String login){
+        Student student = studentRepository.findByLogin(login);
+
+        var listCourses = repository.findByPersonneId(student.getId())
+                .stream()
+                .map(c -> {
+                    var fullCourseDto = modelMapper.map(c, FullCourseDto.class);
+                    return fullCourseDto; })
+                .collect(Collectors.toList());
+        return listCourses;
     }
 
     @Override

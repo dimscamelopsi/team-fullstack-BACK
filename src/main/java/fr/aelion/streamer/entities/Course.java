@@ -12,7 +12,6 @@ import java.util.Set;
 @Table(name = "course")
 @Getter
 @Setter
-@ToString
 public class Course {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
