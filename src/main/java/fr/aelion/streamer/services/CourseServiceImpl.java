@@ -108,7 +108,7 @@ public class CourseServiceImpl implements CourseService {
         return modelMapper.map(newCourse, FullCourseDto.class);
     }
 
-    private String convertToTime(Set<MediaDto> medias) {
+    public String convertToTime(Set<MediaDto> medias) {
         Float time = medias.stream()
                 .map(m -> {
                     m.setTotalTime(LocalTime.MIN.plusSeconds(m.getDuration().longValue()).toString());

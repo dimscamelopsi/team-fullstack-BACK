@@ -4,11 +4,10 @@ import fr.aelion.streamer.dto.ModuleAddDto;
 import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.services.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/module")
@@ -22,6 +21,10 @@ public class ModuleController {
         ModuleDto moduleDto = this.service.add(module);
         return ResponseEntity.ok(moduleDto);
     }
+
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ModuleDto> findAll() {return service.findAll();}
 
 
 }
