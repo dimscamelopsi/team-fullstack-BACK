@@ -17,6 +17,9 @@ public class ModuleService {
     private ModuleRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private CourseServiceImpl courseService;
     public ModuleDto add(ModuleAddDto moduleAddDto) {
         Module newModule = new Module();
         newModule.setName(moduleAddDto.getName());
@@ -35,6 +38,8 @@ public class ModuleService {
                 .stream()
                 .map(module -> {
                     var moduleDto = modelMapper.map(module, ModuleDto.class);
+                    var medias = moduleDto.getMedias();
+                    moduleDto.setTotalTime(courseService.convertToTime(medias));
                     return moduleDto;
                 })
                 .collect(Collectors.toList());
