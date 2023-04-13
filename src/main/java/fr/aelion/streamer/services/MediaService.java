@@ -1,6 +1,4 @@
 package fr.aelion.streamer.services;
-
-
 import fr.aelion.streamer.dto.CourseAddDto;
 import fr.aelion.streamer.dto.FullCourseDto;
 import fr.aelion.streamer.dto.MediaAddDto;
