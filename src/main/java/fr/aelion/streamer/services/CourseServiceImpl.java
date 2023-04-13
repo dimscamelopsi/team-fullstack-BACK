@@ -1,12 +1,10 @@
 package fr.aelion.streamer.services;
 
-import fr.aelion.streamer.dto.CourseAddDto;
-import fr.aelion.streamer.dto.FullCourseDto;
-import fr.aelion.streamer.dto.MediaDto;
-import fr.aelion.streamer.dto.ModuleDto;
+import fr.aelion.streamer.dto.*;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.repositories.CourseRepository;
 import fr.aelion.streamer.repositories.MediaRepository;
 import fr.aelion.streamer.repositories.ModuleRepository;
@@ -28,9 +26,12 @@ public class CourseServiceImpl implements CourseService {
     private MediaRepository mediaRepository;
 
     @Autowired
+    private StudentService studentService;
+
+    @Autowired
     private ModuleRepository moduleRepository;
     @Autowired
-    ModelMapper modelMapper;
+    private ModelMapper modelMapper;
     public List<FullCourseDto> findAll() {
         var fullCourses = repository.findAll()
                 .stream()
@@ -48,6 +49,8 @@ public class CourseServiceImpl implements CourseService {
         }
         return fullCourses;
     }
+
+
 
     @Override
     public FullCourseDto findOne(int id) {
@@ -118,5 +121,31 @@ public class CourseServiceImpl implements CourseService {
 
         return LocalTime.MIN.plusSeconds(timeAsLong).toString();
 
+    }
+
+    /**
+     * Returned all courses associated with a user
+     * @return
+     */
+    public List<CourseUserDto> findCoursesByStudent(int id){
+        // TODO : Trouver la liste des courses a partir de ID de Student/User
+        Student currentUser = studentService.findOne(id);
+        //System.out.println(currentUser.getId());
+        List<Course> coursesList = new ArrayList<>();
+        //TODO MAP
+        try {
+            coursesList = repository.findAllCourseUsersNative(currentUser.getId());
+            //System.out.println(coursesList);
+        } catch (Exception e) {
+            //System.out.println(e);
+        }
+        List<CourseUserDto> newCoursList = new ArrayList<>();
+        coursesList.stream().map(
+                course -> {
+                    return newCoursList.add(modelMapper.map(course, CourseUserDto.class));
+                }
+        ).collect(Collectors.toList());
+
+       return newCoursList;
     }
 }
