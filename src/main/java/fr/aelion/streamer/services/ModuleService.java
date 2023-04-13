@@ -8,6 +8,9 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ModuleService {
     @Autowired
@@ -26,6 +29,18 @@ public class ModuleService {
         newModule = repository.save(newModule);
         return modelMapper.map(newModule, ModuleDto.class);
     }
+
+    public List<ModuleDto> findAll() {
+        var modules = repository.findAll()
+                .stream()
+                .map(module -> {
+                    var moduleDto = modelMapper.map(module, ModuleDto.class);
+                    return moduleDto;
+                })
+                .collect(Collectors.toList());
+
+        return modules;
+    };
 
 
 }
