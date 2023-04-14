@@ -4,6 +4,7 @@ import fr.aelion.streamer.dto.FullCourseDto;
 import fr.aelion.streamer.dto.MediaAddDto;
 import fr.aelion.streamer.dto.MediaDto;
 import fr.aelion.streamer.services.MediaService;
+import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
