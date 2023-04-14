@@ -21,5 +21,4 @@ public class TypeMedia {
 
     @OneToMany
     private List<Media> medias;
-
 }

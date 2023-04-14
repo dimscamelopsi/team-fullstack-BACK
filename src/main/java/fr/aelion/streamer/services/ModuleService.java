@@ -1,4 +1,5 @@
 package fr.aelion.streamer.services;
+
 import fr.aelion.streamer.dto.ModuleAddDto;
 import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
@@ -14,12 +15,13 @@ public class ModuleService {
     private ModuleRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
     public ModuleDto add(ModuleAddDto moduleAddDto) {
         Module newModule = new Module();
         newModule.setName(moduleAddDto.getName());
         newModule.setObjective(moduleAddDto.getObjective());
-        Course course= new Course();
-        if(moduleAddDto.getCourse()!=null) {
+        Course course = new Course();
+        if (moduleAddDto.getCourse() != null) {
             course.setId(moduleAddDto.getCourse().getId());
             newModule.setCourse(course);
         }
