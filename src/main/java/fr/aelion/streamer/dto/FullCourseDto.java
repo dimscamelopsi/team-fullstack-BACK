@@ -2,6 +2,7 @@ package fr.aelion.streamer.dto;
 
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.Student;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,6 +24,8 @@ public class FullCourseDto {
     private String objective;
 
     private Boolean publish;
+
+//    private Student student;
 
     private Set<ModuleDto> modules = new HashSet<>();
 
