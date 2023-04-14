@@ -91,6 +91,7 @@ public class CourseServiceImpl implements CourseService {
         var newCourse = new Course();
         newCourse.setTitle(course.getTitle());
         newCourse.setObjective(course.getObjective());
+        newCourse.setStudent(course.getStudent());
 
         newCourse = repository.save(newCourse);
 
