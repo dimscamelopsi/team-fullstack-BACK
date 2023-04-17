@@ -9,12 +9,18 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class ModuleService {
     @Autowired
     private ModuleRepository repository;
     @Autowired
     private ModelMapper modelMapper;
+
+    @Autowired
+    private CourseServiceImpl courseService;
 
     public ModuleDto add(ModuleAddDto moduleAddDto) {
         Module newModule = new Module();
@@ -29,5 +35,19 @@ public class ModuleService {
         return modelMapper.map(newModule, ModuleDto.class);
     }
 
+    public List<ModuleDto> findAll() {
+        var modules = repository.findAll()
+                .stream()
+                .map(module -> {
+                    var moduleDto = modelMapper.map(module, ModuleDto.class);
+                    var medias = moduleDto.getMedias();
+                    moduleDto.setTotalTime(courseService.convertToTime(medias));
+                    return moduleDto;
+                })
+                .collect(Collectors.toList());
 
+        return modules;
+    }
+
+    ;
 }
