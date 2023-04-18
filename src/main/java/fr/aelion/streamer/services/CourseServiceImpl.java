@@ -92,6 +92,7 @@ public class CourseServiceImpl implements CourseService {
         var newCourse = new Course();
         newCourse.setTitle(course.getTitle());
         newCourse.setObjective(course.getObjective());
+        newCourse.setStudent(course.getStudent());
 
         newCourse = repository.save(newCourse);
 
@@ -109,7 +110,7 @@ public class CourseServiceImpl implements CourseService {
         return modelMapper.map(newCourse, FullCourseDto.class);
     }
 
-    private String convertToTime(Set<MediaDto> medias) {
+    public String convertToTime(Set<MediaDto> medias) {
         Float time = medias.stream()
                 .map(m -> {
                     m.setTotalTime(LocalTime.MIN.plusSeconds(m.getDuration().longValue()).toString());

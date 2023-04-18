@@ -5,6 +5,8 @@ import jakarta.persistence.Column;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Set;
+
 @Getter
 @Setter
 public class ModuleAddDto {
@@ -12,4 +14,6 @@ public class ModuleAddDto {
     private String objective;
     @Column(nullable = false)
     private Course course;
+    private Set<MediaDto> media;
+
 }
