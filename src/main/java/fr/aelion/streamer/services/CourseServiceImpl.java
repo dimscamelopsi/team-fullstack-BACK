@@ -13,6 +13,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -148,4 +149,16 @@ public class CourseServiceImpl implements CourseService {
 
        return newCoursList;
     }
+
+    @Override
+    public void update(Course course, Student student) throws Exception {
+        try {
+            course.setStudent(student);
+            course.setUpdatedAt(LocalDate.now());
+            repository.save(course);}
+        catch (Exception e) {
+            throw new Exception("Something went wrong while updating Student");}
+    }
+
+
 }

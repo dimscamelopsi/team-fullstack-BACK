@@ -1,8 +1,12 @@
 package fr.aelion.streamer.controllers;
 
 import fr.aelion.streamer.dto.CourseAddDto;
+import fr.aelion.streamer.dto.CourseUpdateDto;
 import fr.aelion.streamer.dto.FullCourseDto;
+import fr.aelion.streamer.entities.Course;
+import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.repositories.CourseRepository;
+import fr.aelion.streamer.services.StudentService;
 import fr.aelion.streamer.services.interfaces.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +23,9 @@ public class CourseController {
     private CourseService service;
     @Autowired
     private CourseRepository courseRepository;
+
+    @Autowired
+    private StudentService studentService;
 
     @GetMapping("usersCourses/{id}")
     public ResponseEntity<?> findAllCourseUsersNative(@PathVariable int id) {
@@ -60,4 +67,15 @@ public class CourseController {
         FullCourseDto courseDto = this.service.add(course);
         return ResponseEntity.ok(courseDto);
     }
+
+    @PutMapping("{id}") @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> update(@RequestBody Course course, @PathVariable int id){
+        try{
+            Student student = studentService.findOne(id);
+            service.update(course, student);
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();}
+        catch (Exception e){
+            return ResponseEntity.badRequest().body(e.getMessage());}
+    }
+
 }
