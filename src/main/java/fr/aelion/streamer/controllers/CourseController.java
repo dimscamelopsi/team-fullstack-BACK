@@ -1,7 +1,6 @@
 package fr.aelion.streamer.controllers;
 
 import fr.aelion.streamer.dto.CourseAddDto;
-import fr.aelion.streamer.dto.CourseUpdateDto;
 import fr.aelion.streamer.dto.FullCourseDto;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Student;
@@ -37,8 +36,6 @@ public class CourseController {
             return ResponseEntity.notFound().build();
         }
     }
-
-    @Autowired
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
