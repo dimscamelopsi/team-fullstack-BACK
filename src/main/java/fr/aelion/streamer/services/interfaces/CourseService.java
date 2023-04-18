@@ -21,4 +21,6 @@ public interface CourseService {
     FullCourseDto add(CourseAddDto course);
 
     List<FullCourseDto> getListCourseByAutor(String auth);
+
+    void update(Course course, Student student) throws Exception;
 }
