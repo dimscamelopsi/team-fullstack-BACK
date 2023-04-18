@@ -4,17 +4,17 @@ import fr.aelion.streamer.dto.CourseAddDto;
 import fr.aelion.streamer.dto.CourseUpdateDto;
 import fr.aelion.streamer.dto.FullCourseDto;
 import fr.aelion.streamer.entities.Course;
-import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.repositories.CourseRepository;
-import fr.aelion.streamer.services.StudentService;
 import fr.aelion.streamer.services.interfaces.CourseService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConverterNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/course")
@@ -36,10 +36,22 @@ public class CourseController {
         }
     }
 
+    @Autowired
+
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<FullCourseDto> findAll() {
         return service.findAll();
+    }
+
+    @GetMapping("/manadispcourse/{login}")
+    public List<FullCourseDto> findByLogin(@PathVariable("login") String login) {
+        try {
+            return service.getListCourseByAutor(login);
+        } catch (ConverterNotFoundException e) {
+            System.out.println("[CourseController] Error FindAutor : " + e.getMessage());
+        }
+        return null;
     }
 
     @GetMapping("/{id}")
@@ -68,14 +80,16 @@ public class CourseController {
         return ResponseEntity.ok(courseDto);
     }
 
-    @PutMapping("{id}") @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> update(@RequestBody Course course, @PathVariable int id){
-        try{
+    @PutMapping("{id}")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> update(@RequestBody Course course, @PathVariable int id) {
+        try {
             Student student = studentService.findOne(id);
             service.update(course, student);
-            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();}
-        catch (Exception e){
-            return ResponseEntity.badRequest().body(e.getMessage());}
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

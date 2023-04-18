@@ -28,7 +28,4 @@ public class FullCourseDto {
 //    private Student student;
 
     private Set<ModuleDto> modules = new HashSet<>();
-
-
-
 }
