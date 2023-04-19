@@ -1,5 +1,6 @@
 package fr.aelion.streamer.services;
 
+import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.entities.User;
 import fr.aelion.streamer.repositories.UserRepository;
 import fr.aelion.streamer.services.interfaces.UserService;
