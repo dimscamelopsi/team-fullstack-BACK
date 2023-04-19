@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import fr.aelion.streamer.services.StudentService;
@@ -104,4 +105,30 @@ public class StudentController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @PostMapping("byEmailAndAnswer")
+    public ResponseEntity<?> findByEmailAndAnswer(@RequestBody Student personne) {
+        try {
+            return ResponseEntity.ok(this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer()));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+        /*
+
+        return this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer());
+
+
+                .map(u -> {
+                    return ResponseEntity.ok(u);
+                })
+                .orElse(ResponseEntity.notFound().build());*/
+
+    }
+
+    /*@PostMapping("byEmailAndAnswer")
+    public Optional<Student> findByEmailAndAnswer(@PathVariable("email") String email,@PathVariable("answer") String answer){
+        return this.studentService.findByEmailAndAnswer(email, answer);
+    }*/
+
 }

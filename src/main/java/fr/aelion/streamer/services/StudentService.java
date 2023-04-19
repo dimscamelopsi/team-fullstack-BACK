@@ -1,9 +1,6 @@
 package fr.aelion.streamer.services;
 
-import fr.aelion.streamer.dto.AddStudentDto;
-import fr.aelion.streamer.dto.SimpleStudentDto;
-import fr.aelion.streamer.dto.SimpleStudentProjection;
-import fr.aelion.streamer.dto.StudentDto;
+import fr.aelion.streamer.dto.*;
 import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.repositories.StudentRepository;
 import fr.aelion.streamer.services.exceptions.EmailAlreadyExistsException;
@@ -109,5 +106,28 @@ public class StudentService {
 
     public Optional<Student> findByLoginAndPassword(String login, String password) {
         return repository.findByLoginAndPassword(login, password);
+    }
+
+    public StudentLoginDto findByEmailAndAnswer(String email, String answer) {
+        // TODO <Je dois utiliser mon dto ici et le retourner
+
+       Optional<Student> studentOptional = this.repository.findByEmailAndAnswer(email,answer);
+       Student studentFromDB = studentOptional.get();
+       StudentLoginDto dto = modelMapper.map(studentFromDB,StudentLoginDto.class );
+
+       System.out.println(dto.getAnswer());
+       return dto;
+    }
+
+
+    public void updatePassword(int id, String password) {
+        Optional<Student> optionalStudent = repository.findById(id);
+        if (optionalStudent.isPresent()) {
+            Student student = optionalStudent.get();
+            student.setPassword(password);
+            repository.save(student);
+        } else {
+            throw new RuntimeException("Person not found");
+        }
     }
 }
