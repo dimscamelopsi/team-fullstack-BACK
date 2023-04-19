@@ -97,13 +97,21 @@ public class StudentController {
         return ResponseEntity.ok(studentService.multipleDelete(ids));
     }
 
-    @PostMapping("byLoginAndPassword")
+    /*@PostMapping("byLoginAndPassword")
     public ResponseEntity<?> findByLoginAndPassword(@RequestBody Student personne) {
         return this.studentService.findByLoginAndPassword(personne.getLogin(), personne.getPassword())
                 .map(u -> {
                     return ResponseEntity.ok(u);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }*/
+    @PostMapping("byLoginAndPassword")
+    public ResponseEntity<?> findByLoginAndPassword(@RequestBody Student personne) {
+        try {
+            return ResponseEntity.ok(this.studentService.findByLoginAndPassword(personne.getLogin(), personne.getPassword()));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @PostMapping("byEmailAndAnswer")
@@ -114,21 +122,6 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
-        /*
-
-        return this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer());
-
-
-                .map(u -> {
-                    return ResponseEntity.ok(u);
-                })
-                .orElse(ResponseEntity.notFound().build());*/
-
     }
-
-    /*@PostMapping("byEmailAndAnswer")
-    public Optional<Student> findByEmailAndAnswer(@PathVariable("email") String email,@PathVariable("answer") String answer){
-        return this.studentService.findByEmailAndAnswer(email, answer);
-    }*/
 
 }

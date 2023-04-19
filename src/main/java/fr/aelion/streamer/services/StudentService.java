@@ -104,8 +104,18 @@ public class StudentService {
         return nonDeletedIds;
     }
 
-    public Optional<Student> findByLoginAndPassword(String login, String password) {
+    /*public Optional<Student> findByLoginAndPassword(String login, String password) {
         return repository.findByLoginAndPassword(login, password);
+    }*/
+    public UserDto findByLoginAndPassword(String login, String password) {
+        // TODO <Je dois utiliser mon dto ici et le retourner
+
+        Optional<Student> studentOptional = this.repository.findByLoginAndPassword(login,password);
+        Student studentFromDB = studentOptional.get();
+        UserDto dto = modelMapper.map(studentFromDB,UserDto.class );
+
+        //System.out.println(dto.getAnswer());
+        return dto;
     }
 
     public StudentLoginDto findByEmailAndAnswer(String email, String answer) {
@@ -115,7 +125,7 @@ public class StudentService {
        Student studentFromDB = studentOptional.get();
        StudentLoginDto dto = modelMapper.map(studentFromDB,StudentLoginDto.class );
 
-       System.out.println(dto.getAnswer());
+       //System.out.println(dto.getAnswer());
        return dto;
     }
 
