@@ -103,5 +103,13 @@ public class StudentController {
                     return ResponseEntity.ok(u);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }*/
+    @PostMapping("byLoginAndPassword")
+    public ResponseEntity<?> findByLoginAndPassword(@RequestBody Student personne) {
+        try {
+            return ResponseEntity.ok(this.studentService.findByLoginAndPassword(personne.getLogin(), personne.getPassword()));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 }

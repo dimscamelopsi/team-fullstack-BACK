@@ -1,9 +1,6 @@
 package fr.aelion.streamer.services;
 
-import fr.aelion.streamer.dto.AddStudentDto;
-import fr.aelion.streamer.dto.SimpleStudentDto;
-import fr.aelion.streamer.dto.SimpleStudentProjection;
-import fr.aelion.streamer.dto.StudentDto;
+import fr.aelion.streamer.dto.*;
 import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.repositories.StudentRepository;
 import fr.aelion.streamer.services.exceptions.EmailAlreadyExistsException;
