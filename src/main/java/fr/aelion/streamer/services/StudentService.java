@@ -107,29 +107,44 @@ public class StudentService {
     /*public Optional<Student> findByLoginAndPassword(String login, String password) {
         return repository.findByLoginAndPassword(login, password);
     }*/
-    public UserDto findByLoginAndPassword(String login, String password) {
-        // TODO <Je dois utiliser mon dto ici et le retourner
 
-        Optional<Student> studentOptional = this.repository.findByLoginAndPassword(login,password);
+    /**
+     * This method check if login and password exist in data base and return response ok
+     *
+     * @param login
+     * @param password
+     * @return
+     */
+    public UserDto findByLoginAndPassword(String login, String password) {
+        Optional<Student> studentOptional = this.repository.findByLoginAndPassword(login, password);
         Student studentFromDB = studentOptional.get();
-        UserDto dto = modelMapper.map(studentFromDB,UserDto.class );
+        UserDto dto = modelMapper.map(studentFromDB, UserDto.class);
 
         //System.out.println(dto.getAnswer());
         return dto;
     }
 
+    /**
+     * This method search if email and answer exist in data base and return a response ok
+     *
+     * @param email
+     * @param answer
+     * @return
+     */
     public StudentLoginDto findByEmailAndAnswer(String email, String answer) {
-        // TODO <Je dois utiliser mon dto ici et le retourner
 
-       Optional<Student> studentOptional = this.repository.findByEmailAndAnswer(email,answer);
-       Student studentFromDB = studentOptional.get();
-       StudentLoginDto dto = modelMapper.map(studentFromDB,StudentLoginDto.class );
-
-       //System.out.println(dto.getAnswer());
-       return dto;
+        Optional<Student> studentOptional = this.repository.findByEmailAndAnswer(email, answer);
+        Student studentFromDB = studentOptional.get();
+        StudentLoginDto dto = modelMapper.map(studentFromDB, StudentLoginDto.class);
+        return dto;
     }
 
-
+    /**
+     * This method update and save a new password
+     *
+     * @param id
+     * @param password
+     */
     public void updatePassword(int id, String password) {
         Optional<Student> optionalStudent = repository.findById(id);
         if (optionalStudent.isPresent()) {

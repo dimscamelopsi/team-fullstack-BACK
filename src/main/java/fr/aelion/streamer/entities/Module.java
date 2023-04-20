@@ -1,5 +1,6 @@
 package fr.aelion.streamer.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,7 +25,9 @@ public class Module {
     private Course course;
 
     @ManyToMany
-    @JoinTable(name = "module_media",
+    @JoinTable(
+            name = "module_media",
+
             joinColumns = @JoinColumn(name = "module_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id"))
     private List<Media> medias;
