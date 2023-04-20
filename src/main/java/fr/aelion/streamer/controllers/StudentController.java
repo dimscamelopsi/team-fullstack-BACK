@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import fr.aelion.streamer.services.StudentService;
@@ -96,7 +97,7 @@ public class StudentController {
         return ResponseEntity.ok(studentService.multipleDelete(ids));
     }
 
-    @PostMapping("byLoginAndPassword")
+    /*@PostMapping("byLoginAndPassword")
     public ResponseEntity<?> findByLoginAndPassword(@RequestBody Student personne) {
         return this.studentService.findByLoginAndPassword(personne.getLogin(), personne.getPassword())
                 .map(u -> {
