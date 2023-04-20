@@ -23,10 +23,8 @@ public class ModuleService {
     private ModuleMediaRepository moduleMediaRepository;
     @Autowired
     private ModelMapper modelMapper;
-
     @Autowired
     private CourseServiceImpl courseService;
-
     public ModuleDto add(ModuleAddDto moduleAddDto) {
         Module newModule = new Module();
         newModule.setName(moduleAddDto.getName());
@@ -47,6 +45,7 @@ public class ModuleService {
 
         }
         newModule = repository.save(newModule);
+
         return modelMapper.map(newModule, ModuleDto.class);
     }
 
