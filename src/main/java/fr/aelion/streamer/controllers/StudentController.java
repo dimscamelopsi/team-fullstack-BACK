@@ -112,4 +112,15 @@ public class StudentController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
+
+    @PostMapping("byEmailAndAnswer")
+    public ResponseEntity<?> findByEmailAndAnswer(@RequestBody Student personne) {
+        try {
+            return ResponseEntity.ok(this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer()));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
 }
