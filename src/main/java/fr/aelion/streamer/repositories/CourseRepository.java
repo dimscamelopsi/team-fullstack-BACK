@@ -14,10 +14,9 @@ import java.util.Collection;
 import java.util.List;
 
 public interface CourseRepository extends JpaRepository<Course, Integer> {
-    @Query(
-            value = "SELECT c.* FROM Course c WHERE c.personne_id = :personne_id",
-            nativeQuery = true)
+    @Query(value = "SELECT c.* FROM Course c WHERE c.personne_id = :personne_id", nativeQuery = true)
     List<Course> findAllCourseUsersNative(@Param("personne_id") int personne_id);
+
     List<Course> findCoursesByStudent(Student student);
 
     @Query(value = "SELECT * FROM public.course c WHERE c.personne_id = id", nativeQuery = true)
