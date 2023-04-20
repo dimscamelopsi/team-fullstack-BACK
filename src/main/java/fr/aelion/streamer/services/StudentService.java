@@ -107,7 +107,55 @@ public class StudentService {
         return nonDeletedIds;
     }
 
-    public Optional<Student> findByLoginAndPassword(String login, String password) {
+    /*public Optional<Student> findByLoginAndPassword(String login, String password) {
         return repository.findByLoginAndPassword(login, password);
+    }*/
+
+    /**
+     * This method check if login and password exist in data base and return response ok
+     *
+     * @param login
+     * @param password
+     * @return
+     */
+    public UserDto findByLoginAndPassword(String login, String password) {
+        Optional<Student> studentOptional = this.repository.findByLoginAndPassword(login, password);
+        Student studentFromDB = studentOptional.get();
+        UserDto dto = modelMapper.map(studentFromDB, UserDto.class);
+
+        //System.out.println(dto.getAnswer());
+        return dto;
+    }
+
+    /**
+     * This method search if email and answer exist in data base and return a response ok
+     *
+     * @param email
+     * @param answer
+     * @return
+     */
+    public StudentLoginDto findByEmailAndAnswer(String email, String answer) {
+
+        Optional<Student> studentOptional = this.repository.findByEmailAndAnswer(email, answer);
+        Student studentFromDB = studentOptional.get();
+        StudentLoginDto dto = modelMapper.map(studentFromDB, StudentLoginDto.class);
+        return dto;
+    }
+
+    /**
+     * This method update and save a new password
+     *
+     * @param id
+     * @param password
+     */
+    public void updatePassword(int id, String password) {
+        Optional<Student> optionalStudent = repository.findById(id);
+        if (optionalStudent.isPresent()) {
+            Student student = optionalStudent.get();
+            student.setPassword(password);
+            repository.save(student);
+        } else {
+            throw new RuntimeException("Person not found");
+        }
     }
 }
