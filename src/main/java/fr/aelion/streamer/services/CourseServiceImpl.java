@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
+
     @Autowired
     private CourseRepository repository;
 
@@ -30,16 +31,15 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private ModuleRepository moduleRepository;
+
     @Autowired
     private ModelMapper modelMapper;
+
     public List<FullCourseDto> findAll() {
-        var fullCourses = repository.findAll()
-                .stream()
-                .map(c -> {
-                    var fullCourseDto = modelMapper.map(c, FullCourseDto.class);
-                    return fullCourseDto;
-                })
-                .collect(Collectors.toList());
+        var fullCourses = repository.findAll().stream().map(c -> {
+            var fullCourseDto = modelMapper.map(c, FullCourseDto.class);
+            return fullCourseDto;
+        }).collect(Collectors.toList());
         // Compute media time
         for (FullCourseDto fc : fullCourses) {
             for (ModuleDto m : fc.getModules()) {
@@ -50,17 +50,12 @@ public class CourseServiceImpl implements CourseService {
         return fullCourses;
     }
 
-
-
     @Override
     public FullCourseDto findOne(int id) {
-       return repository.findById(id)
-               .map((c) -> {
-                    var fullCourseDto =  modelMapper.map(c, FullCourseDto.class);
-                    return fullCourseDto;
-               })
-               .orElseThrow();
-
+        return repository.findById(id).map((c) -> {
+            var fullCourseDto = modelMapper.map(c, FullCourseDto.class);
+            return fullCourseDto;
+        }).orElseThrow();
     }
 
     @Override
@@ -83,7 +78,6 @@ public class CourseServiceImpl implements CourseService {
         } else {
             throw new NoSuchElementException();
         }
-
     }
 
     @Override
@@ -110,13 +104,10 @@ public class CourseServiceImpl implements CourseService {
     }
 
     public String convertToTime(Set<MediaDto> medias) {
-        Float time = medias.stream()
-                .map(m -> {
-                    m.setTotalTime(LocalTime.MIN.plusSeconds(m.getDuration().longValue()).toString());
-                    return m;
-                })
-                .map(m -> m.getDuration())
-                .reduce(Float.valueOf(0), (subtotal, duration) -> subtotal + duration);
+        Float time = medias.stream().map(m -> {
+            m.setTotalTime(LocalTime.MIN.plusSeconds(m.getDuration().longValue()).toString());
+            return m;
+        }).map(m -> m.getDuration()).reduce(Float.valueOf(0), (subtotal, duration) -> subtotal + duration);
 
         var timeAsLong = Math.round(time);
 
@@ -126,9 +117,10 @@ public class CourseServiceImpl implements CourseService {
 
     /**
      * Returned all courses associated with a user
+     *
      * @return
      */
-    public List<CourseUserDto> findCoursesByStudent(int id){
+    public List<CourseUserDto> findCoursesByStudent(int id) {
         // TODO : Trouver la liste des courses a partir de ID de Student/User
         Student currentUser = studentService.findOne(id);
         //System.out.println(currentUser.getId());
@@ -141,12 +133,10 @@ public class CourseServiceImpl implements CourseService {
             //System.out.println(e);
         }
         List<CourseUserDto> newCoursList = new ArrayList<>();
-        coursesList.stream().map(
-                course -> {
-                    return newCoursList.add(modelMapper.map(course, CourseUserDto.class));
-                }
-        ).collect(Collectors.toList());
+        coursesList.stream().map(course -> {
+            return newCoursList.add(modelMapper.map(course, CourseUserDto.class));
+        }).collect(Collectors.toList());
 
-       return newCoursList;
+        return newCoursList;
     }
 }
