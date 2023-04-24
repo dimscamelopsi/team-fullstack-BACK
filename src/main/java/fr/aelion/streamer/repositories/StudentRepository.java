@@ -13,7 +13,11 @@ import java.util.Optional;
 @Repository
 public interface StudentRepository extends JpaRepository<Student, Integer> {
     public Student findByEmail(String email);
+
     public Student findByLogin(String login);
+
+
+
     @Query("SELECT s.id id, s.lastName lastName, s.firstName firstName, s.email email FROM Student s")
     public List<SimpleStudentProjection> getSimpleStudents();
 
@@ -21,11 +25,15 @@ public interface StudentRepository extends JpaRepository<Student, Integer> {
     public Student findByEmailOrLogin(@Param("email") String email, @Param("login") String login);
 
     @Query(
-            value="SELECT s.* FROM student s WHERE email = :email OR login = :login",
+            value = "SELECT s.* FROM student s WHERE email = :email OR login = :login",
             nativeQuery = true
     )
     public Student nativeByEmailOrLogin(@Param("email") String email, @Param("login") String login);
 
     @Query("SELECT s FROM Student s WHERE s.login = :login AND s.password = :password")
     Optional<Student> findByLoginAndPassword(@Param("login") String login, @Param("password") String password);
+    @Query("SELECT s FROM Student s WHERE s.email = :email AND s.answer = :answer")
+    Optional<Student> findByEmailAndAnswer(@Param("email") String email, @Param("answer") String answer);
+
+
 }

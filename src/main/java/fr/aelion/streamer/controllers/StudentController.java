@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
 
 import fr.aelion.streamer.services.StudentService;
@@ -96,12 +97,31 @@ public class StudentController {
         return ResponseEntity.ok(studentService.multipleDelete(ids));
     }
 
-    @PostMapping("byLoginAndPassword")
+    /*@PostMapping("byLoginAndPassword")
     public ResponseEntity<?> findByLoginAndPassword(@RequestBody Student personne) {
         return this.studentService.findByLoginAndPassword(personne.getLogin(), personne.getPassword())
                 .map(u -> {
                     return ResponseEntity.ok(u);
                 })
                 .orElse(ResponseEntity.notFound().build());
+    }*/
+    @PostMapping("byLoginAndPassword")
+    public ResponseEntity<?> findByLoginAndPassword(@RequestBody Student personne) {
+        try {
+            return ResponseEntity.ok(this.studentService.findByLoginAndPassword(personne.getLogin(), personne.getPassword()));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
+
+    @PostMapping("byEmailAndAnswer")
+    public ResponseEntity<?> findByEmailAndAnswer(@RequestBody Student personne) {
+        try {
+            return ResponseEntity.ok(this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer()));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+
 }
