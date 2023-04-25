@@ -77,5 +77,14 @@ public class ModuleService {
             throw new NoSuchElementException();}
     }
 
+    public void remove(int id) {
+        var aModule = repository.findById(id);
+
+        if (aModule.isPresent()) {
+            repository.delete(aModule.get());}
+        else {
+            throw new NoSuchElementException();}
+    }
+
 
 }
