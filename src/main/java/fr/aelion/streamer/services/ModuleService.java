@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,6 +66,15 @@ public class ModuleService {
                 .collect(Collectors.toList());
 
         return modules;
+    }
+
+    public void remove(int id) {
+        var aModule = repository.findById(id);
+
+        if (aModule.isPresent()) {
+            repository.delete(aModule.get());}
+        else {
+            throw new NoSuchElementException();}
     }
 
 

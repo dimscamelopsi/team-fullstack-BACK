@@ -19,7 +19,7 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
 
     List<Course> findCoursesByStudent(Student student);
 
-    @Query(value = "SELECT * FROM public.course c WHERE c.personne_id = id", nativeQuery = true)
+    @Query(value = "SELECT * FROM public.course c WHERE c.personne_id = :id", nativeQuery = true)
     List<Course> findByPersonneId(@Param("id") int id);
 
     @Query("SELECT s FROM Student s WHERE s.login = :login AND s.password = :password")
