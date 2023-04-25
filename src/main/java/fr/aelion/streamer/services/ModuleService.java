@@ -2,6 +2,7 @@ package fr.aelion.streamer.services;
 import fr.aelion.streamer.dto.ModuleAddDto;
 import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
+import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
 import fr.aelion.streamer.repositories.ModuleRepository;
 import org.modelmapper.ModelMapper;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.stream.Collectors;
 
 @Service
@@ -46,6 +48,15 @@ public class ModuleService {
 
         return modules;
     };
+
+    public void remove(int id) {
+        var aModule = repository.findById(id);
+
+        if (aModule.isPresent()) {
+            repository.delete(aModule.get());}
+        else {
+            throw new NoSuchElementException();}
+    }
 
 
 }
