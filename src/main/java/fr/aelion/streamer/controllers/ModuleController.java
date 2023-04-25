@@ -2,7 +2,6 @@ package fr.aelion.streamer.controllers;
 
 import fr.aelion.streamer.dto.ModuleAddDto;
 import fr.aelion.streamer.dto.ModuleDto;
-import fr.aelion.streamer.entities.Module;
 import fr.aelion.streamer.services.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,10 +9,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 @RestController
 @RequestMapping("api/v1/module")
-
 public class ModuleController {
 
     @Autowired
@@ -27,12 +26,15 @@ public class ModuleController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ModuleDto> findAll() {
-        return service.findAll();
-    }
+    public List<ModuleDto> findAll() {return service.findAll();}
 
-    @GetMapping("{id}")
-    public List<Module> find(@PathVariable Integer id) {
-        return service.findByCourse(id);
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> remove(@PathVariable() int id) {
+        try {
+            service.remove(id);
+            return ResponseEntity.noContent().build();
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 }

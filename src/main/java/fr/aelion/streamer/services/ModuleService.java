@@ -1,6 +1,5 @@
 package fr.aelion.streamer.services;
 
-import fr.aelion.streamer.dto.CourseUserDto;
 import fr.aelion.streamer.dto.ModuleAddDto;
 import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
@@ -14,7 +13,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -69,16 +67,12 @@ public class ModuleService {
         return modules;
     }
 
-    public List<Module> findByCourse(Integer id) {
+    public void remove(int id) {
+        var aModule = repository.findById(id);
 
-        List<CourseUserDto> courses = courseService.findCoursesByStudent(id);
-        List<Module> momo = new ArrayList<>();
-        courses.stream().map(courseUserDto -> {
-            Course course = modelMapper.map(courseUserDto, Course.class);
-            Set<Module> modules = course.getModules();
-            modules.stream().map(momo::add);
-            return courses;
-        });
-        return momo;
+        if (aModule.isPresent()) {
+            repository.delete(aModule.get());}
+        else {
+            throw new NoSuchElementException();}
     }
 }

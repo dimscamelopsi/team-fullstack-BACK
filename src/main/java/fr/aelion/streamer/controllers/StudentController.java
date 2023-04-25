@@ -68,6 +68,7 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
     }
+
     @PutMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public ResponseEntity<?> update(@RequestBody Student student) {
@@ -104,6 +105,7 @@ public class StudentController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }*/
+
     @PostMapping("byLoginAndPassword")
     public ResponseEntity<?> findByLoginAndPassword(@RequestBody Student personne) {
         try {
@@ -116,8 +118,19 @@ public class StudentController {
     @PostMapping("byEmailAndAnswer")
     public ResponseEntity<?> findByEmailAndAnswer(@RequestBody Student personne) {
         try {
-            return ResponseEntity.ok(this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer()));
-        } catch (Exception e) {
+            return ResponseEntity.ok(this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer().toUpperCase()));
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+
+    }
+    @PutMapping("updatePassword")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> updatePassword( @RequestBody StudentDto stuEmailPass) {
+        try {
+            studentService.updatePassword(stuEmailPass.getEmail(), stuEmailPass.getPassword());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }

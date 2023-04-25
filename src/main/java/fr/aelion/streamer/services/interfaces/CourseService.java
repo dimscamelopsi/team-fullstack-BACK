@@ -19,7 +19,7 @@ public interface CourseService {
 
     FullCourseDto add(CourseAddDto course);
 
-    List<FullCourseDto> getListCourseByAutor(String auth);
+    List<FullCourseDto> getListCourseByAutor(int id);
 
     void update(Course course, Student student) throws Exception;
 }
