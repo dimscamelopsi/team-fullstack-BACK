@@ -142,11 +142,11 @@ public class StudentService {
     /**
      * This method update and save a new password
      *
-     * @param id
+     * @param email
      * @param password
      */
-    public void updatePassword(int id, String password) {
-        Optional<Student> optionalStudent = repository.findById(id);
+    public void updatePassword(String email, String password) {
+        Optional<Student> optionalStudent = Optional.ofNullable(repository.findByEmail(email));
         if (optionalStudent.isPresent()) {
             Student student = optionalStudent.get();
             student.setPassword(password);
