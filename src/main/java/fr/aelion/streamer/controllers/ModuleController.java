@@ -11,7 +11,6 @@ import java.util.List;
 
 @RestController
 @RequestMapping("api/v1/module")
-
 public class ModuleController {
     @Autowired
     private ModuleService service;
@@ -25,6 +24,4 @@ public class ModuleController {
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ModuleDto> findAll() {return service.findAll();}
-
-
 }
