@@ -15,13 +15,14 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("api/v1/course")
 public class CourseController {
+
     @Autowired
     private CourseService service;
+
     @Autowired
     private CourseRepository courseRepository;
 
@@ -90,5 +91,4 @@ public class CourseController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

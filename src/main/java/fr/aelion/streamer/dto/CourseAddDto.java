@@ -9,7 +9,9 @@ import java.util.Set;
 @Getter
 @Setter
 public class CourseAddDto {
+
     private String title;
+
     private String objective;
     private Set<ModuleAddDto> modules;
 

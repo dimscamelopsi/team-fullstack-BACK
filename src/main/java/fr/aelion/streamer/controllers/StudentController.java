@@ -5,6 +5,7 @@ import fr.aelion.streamer.dto.SimpleStudentDto;
 import fr.aelion.streamer.dto.SimpleStudentProjection;
 import fr.aelion.streamer.dto.StudentDto;
 import fr.aelion.streamer.entities.Student;
+import fr.aelion.streamer.services.StudentService;
 import fr.aelion.streamer.services.exceptions.EmailAlreadyExistsException;
 import fr.aelion.streamer.services.exceptions.LoginAlreadyExistsException;
 import jakarta.validation.Valid;
@@ -13,17 +14,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 import java.util.Set;
-
-import fr.aelion.streamer.services.StudentService;
 
 @RestController
 @RequestMapping("api/v1/students") // http://127.0.0.1:8080/api/v1/students
 public class StudentController {
+
     @Autowired
     private StudentService studentService;
 
@@ -31,12 +29,13 @@ public class StudentController {
     public List<StudentDto> findAll() {
         return studentService.findAll();
     }
+
     @GetMapping("{id}") // GET http://127.0.0.1:5000/api/v1/students/1
     public ResponseEntity<?> findOne(@PathVariable int id) {
         try {
             return ResponseEntity.ok(studentService.findOne(id));
         } catch (NoSuchElementException e) {
-            return new ResponseEntity<>( "Student with " + id + " was not found", HttpStatus.NOT_FOUND);
+            return new ResponseEntity<>("Student with " + id + " was not found", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -61,7 +60,7 @@ public class StudentController {
         try {
             Student newStudent = studentService.add(student);
             return ResponseEntity.created(null).body(newStudent);
-        } catch(EmailAlreadyExistsException e) {
+        } catch (EmailAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body(e.reject());
         } catch (LoginAlreadyExistsException e) {
             return ResponseEntity.status(HttpStatus.CONFLICT).body((e.reject()));
@@ -75,7 +74,7 @@ public class StudentController {
         try {
             studentService.update(student);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -86,7 +85,7 @@ public class StudentController {
         try {
             studentService.delete(id);
             return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
-        } catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -109,7 +108,7 @@ public class StudentController {
     public ResponseEntity<?> findByLoginAndPassword(@RequestBody Student personne) {
         try {
             return ResponseEntity.ok(this.studentService.findByLoginAndPassword(personne.getLogin(), personne.getPassword()));
-        } catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
@@ -118,10 +117,8 @@ public class StudentController {
     public ResponseEntity<?> findByEmailAndAnswer(@RequestBody Student personne) {
         try {
             return ResponseEntity.ok(this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer()));
-        } catch(Exception e) {
+        } catch (Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
-
     }
-
 }

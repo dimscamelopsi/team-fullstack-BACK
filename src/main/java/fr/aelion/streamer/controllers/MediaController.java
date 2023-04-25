@@ -12,6 +12,7 @@ import java.util.List;
 @RestController
 @RequestMapping("api/v1/media")
 public class MediaController {
+
     @Autowired
     private MediaService mediaService;
 
@@ -19,5 +20,4 @@ public class MediaController {
     public List<MediaDto> findAll() {
         return mediaService.findAll();
     }
-
 }

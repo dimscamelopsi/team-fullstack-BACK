@@ -8,13 +8,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
-import java.util.Set;
 
 @RestController
 @RequestMapping("api/v1/module")
 
 public class ModuleController {
+
     @Autowired
     private ModuleService service;
 
@@ -26,9 +27,12 @@ public class ModuleController {
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
-    public List<ModuleDto> findAll() {return service.findAll();}
+    public List<ModuleDto> findAll() {
+        return service.findAll();
+    }
+
     @GetMapping("{id}")
-    public List<Module> find( @PathVariable Integer id) {return service.findByCourse(id);}
-
-
+    public List<Module> find(@PathVariable Integer id) {
+        return service.findByCourse(id);
+    }
 }

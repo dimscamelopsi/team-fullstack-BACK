@@ -1,5 +1,6 @@
 package fr.aelion.streamer.services;
 
+import fr.aelion.streamer.dto.CourseUserDto;
 import fr.aelion.streamer.dto.ModuleAddDto;
 import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
@@ -18,14 +19,19 @@ import java.util.stream.Collectors;
 
 @Service
 public class ModuleService {
+
     @Autowired
     private ModuleRepository repository;
+
     @Autowired
     private ModuleMediaRepository moduleMediaRepository;
+
     @Autowired
     private ModelMapper modelMapper;
+
     @Autowired
     private CourseServiceImpl courseService;
+
     public ModuleDto add(ModuleAddDto moduleAddDto) {
         Module newModule = new Module();
         newModule.setName(moduleAddDto.getName());
@@ -43,7 +49,6 @@ public class ModuleService {
                 medias.add(media);
             });
             newModule.setMedias(medias);
-
         }
         newModule = repository.save(newModule);
 
@@ -51,24 +56,18 @@ public class ModuleService {
     }
 
     /**
-     *
      * @return
      */
     public List<ModuleDto> findAll() {
-        var modules = repository.findAll()
-                .stream()
-                .map(module -> {
-                    var moduleDto = modelMapper.map(module, ModuleDto.class);
-                    var medias = moduleDto.getMedias();
-                    moduleDto.setTotalTime(courseService.convertToTime(medias));
-                    return moduleDto;
-                })
-                .collect(Collectors.toList());
+        var modules = repository.findAll().stream().map(module -> {
+            var moduleDto = modelMapper.map(module, ModuleDto.class);
+            var medias = moduleDto.getMedias();
+            moduleDto.setTotalTime(courseService.convertToTime(medias));
+            return moduleDto;
+        }).collect(Collectors.toList());
 
         return modules;
     }
-
-    ;
 
     public List<Module> findByCourse(Integer id) {
 
@@ -77,11 +76,9 @@ public class ModuleService {
         courses.stream().map(courseUserDto -> {
             Course course = modelMapper.map(courseUserDto, Course.class);
             Set<Module> modules = course.getModules();
-             modules.stream().map(momo::add);
+            modules.stream().map(momo::add);
             return courses;
         });
-        return  momo;
+        return momo;
     }
-
-
 }
