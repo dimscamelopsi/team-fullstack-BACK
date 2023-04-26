@@ -117,11 +117,21 @@ public class StudentController {
     @PostMapping("byEmailAndAnswer")
     public ResponseEntity<?> findByEmailAndAnswer(@RequestBody Student personne) {
         try {
-            return ResponseEntity.ok(this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer()));
+            return ResponseEntity.ok(this.studentService.findByEmailAndAnswer(personne.getEmail(), personne.getAnswer().toUpperCase()));
         } catch(Exception e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
 
+    }
+    @PutMapping("updatePassword")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> updatePassword( @RequestBody StudentDto stuEmailPass) {
+        try {
+            studentService.updatePassword(stuEmailPass.getEmail(), stuEmailPass.getPassword());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } catch(Exception e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
 }

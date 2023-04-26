@@ -1,5 +1,6 @@
 package fr.aelion.streamer.services.interfaces;
 
+import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.entities.User;
 
 import java.util.Optional;

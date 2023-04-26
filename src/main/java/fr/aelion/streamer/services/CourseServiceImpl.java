@@ -55,17 +55,26 @@ public class CourseServiceImpl implements CourseService {
         return fullCourses;
     }
 
-    public List<FullCourseDto> getListCourseByAutor(String login) {
-        Student student = studentRepository.findByLogin(login);
+    @Override
+    public List<FullCourseDto> getListCourseByAutor(int id) {
+        Optional<Student> student = studentRepository.findById(id);
+        System.out.println("#######   getListCourseByAutor : "+ student.get().getId());
 
-        var listCourses = repository.findByPersonneId(student.getId())
+        var listCoursesManage = repository.findByPersonneId(student.get().getId())
                 .stream()
                 .map(c -> {
                     var fullCourseDto = modelMapper.map(c, FullCourseDto.class);
                     return fullCourseDto;
-                })
-                .collect(Collectors.toList());
-        return listCourses;
+                }).collect(Collectors.toList());
+
+        System.out.println("#######   getListCourseByAutor :"+ listCoursesManage);
+        for (FullCourseDto fc : listCoursesManage) {
+            for (ModuleDto m : fc.getModules()) {
+                var medias = m.getMedias();
+                m.setTotalTime(convertToTime(medias));
+            }
+        }
+        return listCoursesManage;
     }
 
     @Override
