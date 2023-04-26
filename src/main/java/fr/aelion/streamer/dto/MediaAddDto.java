@@ -2,8 +2,8 @@ package fr.aelion.streamer.dto;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
 @Getter
 @Setter
 public class MediaAddDto {
@@ -14,4 +14,5 @@ public class MediaAddDto {
 
     private String url;
     private TypeMediaDto typeMedia;
+    private MultipartFile file;
 }
