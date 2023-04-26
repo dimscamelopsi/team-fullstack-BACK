@@ -27,4 +27,6 @@ public class Module {
     @ManyToMany
     @JoinTable(name = "module_media", joinColumns = @JoinColumn(name = "module_id"), inverseJoinColumns = @JoinColumn(name = "media_id"))
     private List<Media> medias;
+
+    private Integer orderModule;
 }
