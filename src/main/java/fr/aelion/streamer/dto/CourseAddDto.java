@@ -14,4 +14,6 @@ public class CourseAddDto {
     private Set<ModuleAddDto> modules;
 
     private Student student;
+
+    private Boolean publish;
 }
