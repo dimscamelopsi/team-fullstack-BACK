@@ -15,5 +15,6 @@ public class ModuleAddDto {
     @Column(nullable = false)
     private Course course;
     private Set<MediaDto> media;
+    private Integer orderModule;
 
 }

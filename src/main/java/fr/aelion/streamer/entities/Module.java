@@ -31,4 +31,6 @@ public class Module {
             joinColumns = @JoinColumn(name = "module_id"),
             inverseJoinColumns = @JoinColumn(name = "media_id"))
     private List<Media> medias;
+
+    private Integer orderModule;
 }

@@ -18,5 +18,7 @@ public class ModuleDto {
 
     private String totalTime;
 
+    private Integer orderModule;
+
     private boolean isSelected = false;
 }
