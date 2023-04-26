@@ -3,12 +3,17 @@ import fr.aelion.streamer.dto.MediaAddDto;
 import fr.aelion.streamer.dto.MediaDto;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.TypeMedia;
+import fr.aelion.streamer.exceptions.message.ResponseMessage;
 import fr.aelion.streamer.repositories.MediaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -22,6 +27,8 @@ import java.nio.file.Paths;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+
 
 @Service
 public class MediaService {
@@ -44,7 +51,7 @@ public class MediaService {
             }
             throw new RuntimeException(e.getMessage());
         }
-       // newMediaType.setId( media.getTypeMedia().getId());
+       newMediaType.setId( media.getTypeMedia().getId());
 
         newMedia = modelMapper.map(media, Media.class);
         newMediaType = modelMapper.map(media.getTypeMedia(),TypeMedia.class);
@@ -53,17 +60,30 @@ public class MediaService {
 
         newMedia = mediaRepository.save(newMedia);
 
-
-
         return modelMapper.map(newMedia, MediaDto.class);
     }
+
+
+
     public List<MediaDto> findAll() {
         return mediaRepository.findAll()
                 .stream()
                 .map(media -> modelMapper.map(media, MediaDto.class))
                 .collect(Collectors.toList());
     }
+    @PostMapping("/uploadFile")
+    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
+        String message = "";
+        try {
 
+
+            message = "Uploaded the file successfully: " + file.getOriginalFilename();
+            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
+        } catch (Exception e) {
+            message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
+        }
+    }
 
     private final Path root = Paths.get("uploads");
     public void init(String mediaUrl) {
@@ -109,4 +129,5 @@ public class MediaService {
             throw new RuntimeException("Could not load the files!");
         }
     }
+
 }
