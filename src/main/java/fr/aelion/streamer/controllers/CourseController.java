@@ -44,12 +44,14 @@ public class CourseController {
         return service.findAll();
     }
 
-    @GetMapping("/managecourse/{id}") @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/managecourse/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public List<FullCourseDto> findCourseByLogin(@PathVariable int id) {
         try {
-            return service.getListCourseByAutor(id);}
-        catch (ConverterNotFoundException e) {
-            System.out.println("[CourseController] Error FindAutor : " + e.getMessage());}
+            return service.getListCourseByAutor(id);
+        } catch (ConverterNotFoundException e) {
+            System.out.println("[CourseController] Error FindAutor : " + e.getMessage());
+        }
         return null;
     }
 
