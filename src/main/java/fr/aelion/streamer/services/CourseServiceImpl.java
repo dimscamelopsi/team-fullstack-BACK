@@ -126,6 +126,14 @@ public class CourseServiceImpl implements CourseService {
             course.getModules().forEach(mDto -> {
                 var module = modelMapper.map(mDto, Module.class);
                 module.setCourse(finalNewCourse);
+                if (mDto.getMedias() != null) {
+                    List<Media> medias = new ArrayList<>();
+                    mDto.getMedias().forEach(meDto -> {
+                        var media = modelMapper.map(meDto, Media.class);
+                        medias.add(media);
+                    });
+                    module.setMedias(medias);
+                }
                 module = moduleRepository.save(module);
                 courseModules.add(module);
             });
