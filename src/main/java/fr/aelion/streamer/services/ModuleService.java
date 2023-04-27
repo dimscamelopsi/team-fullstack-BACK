@@ -34,6 +34,8 @@ public class ModuleService {
         if (moduleAddDto.getCourse() != null) {
             course.setId(moduleAddDto.getCourse().getId());
             newModule.setCourse(course);
+        }else{
+            newModule.setCourse(null);
         }
         if (moduleAddDto.getMedia() != null) {
             List<Media> medias = new ArrayList<>();
