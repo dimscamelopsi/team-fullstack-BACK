@@ -46,16 +46,20 @@ public class MediaController {
         String mediaUrl = saveMediaFile(file);
         Media media = mediaService.createMedia(title, summary, mediaType, mediaUrl, duration);
         Module module = moduleRepository.findById(moduleId).orElse(null);
-        if (module == null) {
-            return ResponseEntity.badRequest().body("{\"error\": \"Module not found\"}");
-        }
+        /**
+         *       if (module == null) {
+         *             return ResponseEntity.badRequest().body("{\"error\": \"Module not found\"}");
+         *         }
+         *
+         *         ModuleMedia moduleMedia = moduleService.addMediaToModule(module, media);
+         *         if (moduleMedia != null) {
+         *             return ResponseEntity.status(HttpStatus.CREATED).body("Media created and linked to the module");
+         *         } else {
+         *             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error linking media to module");
+         *
+         */
 
-        ModuleMedia moduleMedia = moduleService.addMediaToModule(module, media);
-        if (moduleMedia != null) {
-            return ResponseEntity.status(HttpStatus.CREATED).body("Media created and linked to the module");
-        } else {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error linking media to module");
-        }
+        return ResponseEntity.status(HttpStatus.CREATED).body("Media created and linked to the module");
     }
 
     private String saveMediaFile(MultipartFile file) {

@@ -30,7 +30,19 @@ public class MediaService {
         this.mediaRepository = mediaRepository;
         this.modelMapper = modelMapper;
     }
+    public Media createMedia(String title, String summary, String mediaType, String mediaUrl, String duration) {
+        Media media = new Media();
 
+        TypeMedia typeMedia = new TypeMedia();
+        typeMedia.setTitle(mediaType);
+        media.setTitle(title);
+        media.setSummary(summary);
+        media.setTypeMedia(typeMedia);
+        media.setUrl(mediaUrl);
+        media.setDuration(Float.valueOf(duration));
+
+        return mediaRepository.save(media);
+    }
     public List<MediaDto> findAll() {
         List<Media> mediaList = mediaRepository.findAll();
         return mediaList.stream()
