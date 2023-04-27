@@ -1,47 +1,57 @@
 package fr.aelion.streamer.services;
-import fr.aelion.streamer.dto.MediaAddDto;
-import fr.aelion.streamer.dto.MediaDto;
-import fr.aelion.streamer.entities.Media;
+
+import java.io.IOException;
+import java.net.MalformedURLException;
+import java.nio.file.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.aelion.streamer.entities.TypeMedia;
-import fr.aelion.streamer.exceptions.message.ResponseMessage;
-import fr.aelion.streamer.repositories.MediaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.io.InputStream;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.file.FileAlreadyExistsException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-
-
-
+import fr.aelion.streamer.dto.MediaAddDto;
+import fr.aelion.streamer.dto.MediaDto;
+import fr.aelion.streamer.entities.Media;
+import fr.aelion.streamer.repositories.MediaRepository;
 @Service
 public class MediaService {
-    @Autowired
-    MediaRepository mediaRepository;
-    @Autowired
-    ModelMapper modelMapper;
-    public MediaDto add(MediaAddDto media)  {
 
+    private final MediaRepository mediaRepository;
+    private final ModelMapper modelMapper;
+    private final Path root = Paths.get("uploads");
+
+    @Autowired
+    public MediaService(MediaRepository mediaRepository, ModelMapper modelMapper) {
+        this.mediaRepository = mediaRepository;
+        this.modelMapper = modelMapper;
+    }
+
+    public List<MediaDto> findAll() {
+        List<Media> mediaList = mediaRepository.findAll();
+        return mediaList.stream()
+                .map(media -> modelMapper.map(media, MediaDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public MediaDto add(MultipartFile file, String mediaAddDtoJson) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        MediaAddDto mediaAddDto;
+        try {
+            mediaAddDto = objectMapper.readValue(mediaAddDtoJson, MediaAddDto.class);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse mediaAddDto JSON");
+        }
+
+        mediaAddDto.setFile(file);
 
         var newMedia = new Media();
         var newMediaType = new TypeMedia();
-        MultipartFile file = media.getFile();
 
         try {
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
@@ -51,10 +61,10 @@ public class MediaService {
             }
             throw new RuntimeException(e.getMessage());
         }
-       newMediaType.setId( media.getTypeMedia().getId());
+        newMediaType.setId(mediaAddDto.getTypeMedia().getId());
 
-        newMedia = modelMapper.map(media, Media.class);
-        newMediaType = modelMapper.map(media.getTypeMedia(),TypeMedia.class);
+        newMedia = modelMapper.map(mediaAddDto, Media.class);
+        newMediaType = modelMapper.map(mediaAddDto.getTypeMedia(),TypeMedia.class);
 
         newMedia.setTypeMedia(newMediaType);
 

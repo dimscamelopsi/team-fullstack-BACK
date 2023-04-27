@@ -76,6 +76,8 @@ public class ModuleService {
         else {
             throw new NoSuchElementException();}
     }
-
+    public Module getModuleById(Integer mediaId) {
+        return repository.findById(mediaId).orElse(null);
+    }
 
 }
