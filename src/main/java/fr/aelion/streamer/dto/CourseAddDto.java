@@ -13,7 +13,9 @@ public class CourseAddDto {
     private String title;
 
     private String objective;
-    private Set<ModuleAddDto> modules;
+    private Set<ModuleDto> modules;
 
     private Student student;
+
+    private Boolean publish;
 }

@@ -119,7 +119,7 @@ public class CourseServiceImpl implements CourseService {
         newCourse.setTitle(course.getTitle());
         newCourse.setObjective(course.getObjective());
         newCourse.setStudent(course.getStudent());
-
+        newCourse.setPublish(course.getPublish());
         newCourse = repository.save(newCourse);
 
         if (course.getModules().size() > 0) {
@@ -128,6 +128,14 @@ public class CourseServiceImpl implements CourseService {
             course.getModules().forEach(mDto -> {
                 var module = modelMapper.map(mDto, Module.class);
                 module.setCourse(finalNewCourse);
+                if (mDto.getMedias() != null) {
+                    List<Media> medias = new ArrayList<>();
+                    mDto.getMedias().forEach(meDto -> {
+                        var media = modelMapper.map(meDto, Media.class);
+                        medias.add(media);
+                    });
+                    module.setMedias(medias);
+                }
                 module = moduleRepository.save(module);
                 courseModules.add(module);
             });
