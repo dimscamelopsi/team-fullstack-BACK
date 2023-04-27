@@ -63,71 +63,28 @@ public class MediaService {
         return modelMapper.map(newMedia, MediaDto.class);
     }
 
-
-
-    public List<MediaDto> findAll() {
-        return mediaRepository.findAll()
-                .stream()
-                .map(media -> modelMapper.map(media, MediaDto.class))
-                .collect(Collectors.toList());
-    }
-    @PostMapping("/uploadFile")
-    public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
-        String message = "";
+   /* public void save(MultipartFile file) {
         try {
-
-
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(new ResponseMessage(message));
-        } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + ". Error: " + e.getMessage();
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(new ResponseMessage(message));
-        }
-    }
-
-    private final Path root = Paths.get("uploads");
-    public void init(String mediaUrl) {
-        try {
-            URL url = new URL(mediaUrl);
-            InputStream in = url.openStream();
-            Files.copy(in, this.root.resolve(url.getFile()));
+            Files.copy(file.getInputStream(), Paths.get(uploadDir + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
         } catch (IOException e) {
-            throw new RuntimeException("Could not initialize folder for upload!");
-        }
-}
-
-    public void save(MultipartFile file) {
-        try {
-            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
-        } catch (Exception e) {
-            if (e instanceof FileAlreadyExistsException) {
-                throw new RuntimeException("A file of that name already exists.");
-            }
-
-            throw new RuntimeException(e.getMessage());
+            throw new RuntimeException("Could not save the file: " + e.getMessage());
         }
     }
 
     public Resource load(String filename) {
+        Path file = Paths.get(uploadDir + filename);
+        Resource resource;
         try {
-            Path file = root.resolve(filename);
-            Resource resource = new UrlResource(file.toUri());
-
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new RuntimeException("Could not read the file!");
-            }
+            resource = new UrlResource(file.toUri());
         } catch (MalformedURLException e) {
-            throw new RuntimeException("Error: " + e.getMessage());
+            throw new RuntimeException("Could not load the file: " + e.getMessage());
         }
-    }
-    public Stream<Path> loadAll() {
-        try {
-            return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not load the files!");
+        if (resource.exists() && resource.isReadable()) {
+            return resource;
+        } else {
+            throw new RuntimeException("Could not load the file: " + filename);
         }
-    }
+    }*/
+
 
 }
