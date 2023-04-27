@@ -6,12 +6,13 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
+import javax.print.attribute.standard.Media;
 import java.util.Optional;
 
 public interface UserRepository extends JpaRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.login = :login AND u.password = :password")
     Optional<User> findByLoginAndPassword(@Param("login") String login, @Param("password") String password);
 
-    //@Query("SELECT u FROM Personne u WHERE u.login = :login AND u.password = :password")
-    //Optional<Student> findByLoginAndPasswordStudent(@Param("login") String login, @Param("password") String password);
+    public interface MediaRepository extends JpaRepository<Media, Long> {
+    }
 }
