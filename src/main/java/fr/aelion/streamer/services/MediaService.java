@@ -2,6 +2,8 @@ package fr.aelion.streamer.services;
 
 import java.io.IOException;
 import java.nio.file.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,21 +28,6 @@ public class MediaService {
     private final Path root = Paths.get("uploads");
 
 
-
-    /**
-     *
-     * @param title @Autowired
-     *     public MediaService(MediaRepository mediaRepository, TypeMediaService typeService, ModelMapper modelMapper) {
-     *         this.mediaRepository = mediaRepository;
-     *         this.typeService = typeService;
-     *         this.modelMapper = modelMapper;
-     *     }
-     * @param summary
-     * @param mediaType
-     * @param mediaUrl
-     * @param duration
-     * @return
-     */
     public Media createMedia(String title, String summary, String mediaType, String mediaUrl, String duration) {
         Media media = new Media();
 
@@ -55,6 +42,8 @@ public class MediaService {
 
         return mediaRepository.save(media);
     }
+
+
     public List<MediaDto> findAll() {
         List<Media> mediaList = mediaRepository.findAll();
         return mediaList.stream()
@@ -97,14 +86,19 @@ public class MediaService {
         return modelMapper.map(newMedia, MediaDto.class);
     }
 
-   /* public void save(MultipartFile file) {
+
+    public void save(MultipartFile file) {
         try {
-            Files.copy(file.getInputStream(), Paths.get(uploadDir + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            throw new RuntimeException("Could not save the file: " + e.getMessage());
+            Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
+        } catch (Exception e) {
+            if (e instanceof FileAlreadyExistsException) {
+                throw new RuntimeException("A file of that name already exists.");
+            }
+
+            throw new RuntimeException(e.getMessage());
         }
     }
-
+  /*
     public Resource load(String filename) {
         Path file = Paths.get(uploadDir + filename);
         Resource resource;
@@ -118,6 +112,131 @@ public class MediaService {
         } else {
             throw new RuntimeException("Could not load the file: " + filename);
         }
+        [15:07] Lina EL AMRANI
+
+
+
+
+
+package fr.aelion.streamer.controllers;
+
+import fr.aelion.streamer.dto.MediaDto;
+import fr.aelion.streamer.entities.Media;
+import
+
+fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.ModuleMedia;
+import fr.aelion.streamer.repositories.ModuleRepository;
+import fr.aelion.streamer.services.MediaService;
+import fr.aelion.streamer.services.ModuleService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.util.UriUtils;
+
+import java.io.File;
+import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
+@CrossOrigin
+@RestController
+@RequestMapping("api/v1/media")
+public class MediaController {
+    @Autowired
+    private MediaService mediaService;
+    @Autowired
+    private ModuleService moduleService;
+    @Autowired
+    private ModuleRepository moduleRepository;
+
+    @PostMapping
+    public ResponseEntity<?> createMedia(
+            @RequestParam("moduleId") Integer moduleId,
+            @RequestParam("mediaType") String mediaType,
+            @RequestParam("title") String title,
+            @RequestParam("summary") String summary,
+            @RequestParam(value = "file", required = false) MultipartFile file,
+            @RequestParam("duration") String duration
+    ) throws IOException {
+        if (file == null || file.isEmpty()) {
+            return ResponseEntity.badRequest().body("Le fichier est manquant ou vide");
+        }
+
+        String mediaUrl = saveMediaFile(file);
+        Media media = mediaService.createMedia(title, summary, mediaType, mediaUrl, duration);
+        Module module = moduleRepository.findById(moduleId).orElse(null);
+        if (module == null) {
+            return ResponseEntity.badRequest().body("Module not found");
+        }
+
+        ModuleMedia moduleMedia = moduleService.addMediaToModule(module, media);
+        if (moduleMedia != null) {
+            return ResponseEntity.status(HttpStatus.CREATED).body("Media created and linked to the module");
+        } else {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error linking media to module");
+        }
+    }
+
+    private String saveMediaFile(MultipartFile file) {
+        if (file == null || file.isEmpty()) {
+            return "Le fichier est manquant ou vide";
+        }
+
+        Path mediaDir = Paths.get("media");
+        if (!Files.exists(mediaDir)) {
+            try {
+                Files.createDirectories(mediaDir);
+            } catch (IOException e) {
+                return "Erreur lors de la création du dossier media";
+            }
+        }
+
+        String originalFilename = file.getOriginalFilename();
+        String[] parts = originalFilename.split("\\.");
+        String extension = parts[parts.length-1];
+        String filename = System.currentTimeMillis() + "." + extension;
+
+        String mediaUrl = "/media/" + filename; //
+
+        String absolutePath = new File(".").getAbsolutePath();
+        String filePathString = absolutePath + File.separator + "media" + File.separator + filename;
+        Path filepath = Paths.get(filePathString);
+
+        try {
+            Files.copy(file.getInputStream(), filepath);
+        } catch (IOException e) {
+            return "Erreur lors de la sauvegarde du fichier";
+        }
+        return mediaUrl;
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteMedia(@PathVariable("id") Integer id) {
+        mediaService.deleteMedia(id);
+        return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping
+    public List<MediaDto> getAllMedia(){
+        return mediaService.findAll();
+    }
+
+}
+
+ 
+
+ 
+
+
+
     }*/
 
 
