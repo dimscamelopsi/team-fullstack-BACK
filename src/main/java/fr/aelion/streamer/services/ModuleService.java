@@ -5,7 +5,6 @@ import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
-import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.repositories.CourseRepository;
 import fr.aelion.streamer.repositories.ModuleMediaRepository;
 import fr.aelion.streamer.repositories.ModuleRepository;
@@ -13,7 +12,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;

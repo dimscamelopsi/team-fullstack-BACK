@@ -2,9 +2,7 @@ package fr.aelion.streamer.controllers;
 
 import fr.aelion.streamer.dto.ModuleAddDto;
 import fr.aelion.streamer.dto.ModuleDto;
-import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Module;
-import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.services.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
