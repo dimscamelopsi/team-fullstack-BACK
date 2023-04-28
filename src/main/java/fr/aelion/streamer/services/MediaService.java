@@ -2,8 +2,6 @@ package fr.aelion.streamer.services;
 
 import java.io.IOException;
 import java.nio.file.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -87,7 +85,7 @@ public class MediaService {
     }
 
 
-    public void save(MultipartFile file) {
+    public String save(MultipartFile file) {
         try {
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
         } catch (Exception e) {
@@ -97,6 +95,13 @@ public class MediaService {
 
             throw new RuntimeException(e.getMessage());
         }
+        String originalFilename = file.getOriginalFilename();
+        String[] parts = originalFilename.split("\\.");
+        String extension = parts[parts.length-1];
+        String filename = System.currentTimeMillis() + "." + extension;
+
+        String mediaUrl = "/" + root + "/" +filename;
+        return mediaUrl;
     }
   /*
     public Resource load(String filename) {

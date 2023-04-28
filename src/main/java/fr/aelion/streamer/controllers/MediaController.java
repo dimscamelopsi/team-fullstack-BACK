@@ -51,17 +51,12 @@ public class MediaController {
             if (file == null || file.isEmpty()) {
                 return ResponseEntity.badRequest().body("{\"error\": \"Le fichier est manquant ou vide\"}");
             }
-            //String mediaUrl = saveMediaFile(file);
-            mediaService.save(file);
+
+            mediaUrl = mediaService.save(file);
             Media media = mediaService.createMedia(title, summary, mediaType, mediaUrl, duration);
             // Module module = moduleRepository.findById(moduleId).orElse(null);
 
             return ResponseEntity.status(HttpStatus.CREATED).body("Media created and linked to the module");
         }
     }
-
-    private String saveMediaFile(MultipartFile file) {
-        return null;
-    }
-
 }
