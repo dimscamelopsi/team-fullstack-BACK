@@ -1,7 +1,6 @@
 package fr.aelion.streamer.controllers;
 
 import fr.aelion.streamer.dto.TypeMediaDto;
-import fr.aelion.streamer.entities.TypeMedia;
 import fr.aelion.streamer.services.TypeMediaService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

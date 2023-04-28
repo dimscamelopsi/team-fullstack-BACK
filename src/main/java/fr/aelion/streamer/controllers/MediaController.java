@@ -2,9 +2,6 @@ package fr.aelion.streamer.controllers;
 
 import fr.aelion.streamer.dto.MediaDto;
 import fr.aelion.streamer.entities.Media;
-import fr.aelion.streamer.entities.Module;
-import fr.aelion.streamer.entities.ModuleMedia;
-import fr.aelion.streamer.entities.TypeMedia;
 import fr.aelion.streamer.repositories.ModuleRepository;
 import fr.aelion.streamer.services.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
