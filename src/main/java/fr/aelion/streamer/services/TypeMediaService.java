@@ -1,6 +1,7 @@
 package fr.aelion.streamer.services;
 
 import fr.aelion.streamer.dto.TypeMediaDto;
+import fr.aelion.streamer.entities.TypeMedia;
 import fr.aelion.streamer.repositories.TypeMediaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public class TypeMediaService {
                 })
                 .collect((Collectors.toList()));
         return typeMedias;
+    }
+    public TypeMedia findByTitle(String title) {
+        return typeMediaRepository.findByTitle(title) ;
     }
 }
 

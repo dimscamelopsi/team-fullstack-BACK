@@ -4,6 +4,7 @@ import fr.aelion.streamer.dto.MediaDto;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
 import fr.aelion.streamer.entities.ModuleMedia;
+import fr.aelion.streamer.entities.TypeMedia;
 import fr.aelion.streamer.repositories.ModuleRepository;
 import fr.aelion.streamer.services.MediaService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +25,8 @@ public class MediaController {
     @Autowired
     private MediaService mediaService;
 
+
+
     @GetMapping("")
     public ResponseEntity<List<MediaDto>> getAllMedia() {
         List<MediaDto> mediaList = mediaService.findAll();
@@ -32,20 +35,23 @@ public class MediaController {
 
     @PostMapping
     public ResponseEntity<?> createMedia(
-            @RequestParam("moduleId") Integer moduleId,
+         //  @RequestParam("moduleId") Integer moduleId,
             @RequestParam("mediaType") String mediaType,
             @RequestParam("title") String title,
             @RequestParam("summary") String summary,
             @RequestParam(value = "file", required = false) MultipartFile file,
-            @RequestParam("duration") String duration
+            @RequestParam("duration") String duration,
+            @RequestParam("mediaUrl") String mediaUrl
     ) throws IOException {
         if (file == null || file.isEmpty()) {
             return ResponseEntity.badRequest().body("{\"error\": \"Le fichier est manquant ou vide\"}");
         }
 
-        String mediaUrl = saveMediaFile(file);
+
+       // TypeMedia typeMedia = ty
+       // String mediaUrl = saveMediaFile(file);
         Media media = mediaService.createMedia(title, summary, mediaType, mediaUrl, duration);
-        Module module = moduleRepository.findById(moduleId).orElse(null);
+       // Module module = moduleRepository.findById(moduleId).orElse(null);
         /**
          *       if (module == null) {
          *             return ResponseEntity.badRequest().body("{\"error\": \"Module not found\"}");

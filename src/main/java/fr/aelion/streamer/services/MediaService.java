@@ -1,7 +1,6 @@
 package fr.aelion.streamer.services;
 
 import java.io.IOException;
-import java.net.MalformedURLException;
 import java.nio.file.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -10,8 +9,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.aelion.streamer.entities.TypeMedia;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import fr.aelion.streamer.dto.MediaAddDto;
@@ -20,21 +17,36 @@ import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.repositories.MediaRepository;
 @Service
 public class MediaService {
-
-    private final MediaRepository mediaRepository;
-    private final ModelMapper modelMapper;
+@Autowired
+    private  MediaRepository mediaRepository;
+    @Autowired
+    private  TypeMediaService typeService;
+    @Autowired
+    private ModelMapper modelMapper;
     private final Path root = Paths.get("uploads");
 
-    @Autowired
-    public MediaService(MediaRepository mediaRepository, ModelMapper modelMapper) {
-        this.mediaRepository = mediaRepository;
-        this.modelMapper = modelMapper;
-    }
+
+
+    /**
+     *
+     * @param title @Autowired
+     *     public MediaService(MediaRepository mediaRepository, TypeMediaService typeService, ModelMapper modelMapper) {
+     *         this.mediaRepository = mediaRepository;
+     *         this.typeService = typeService;
+     *         this.modelMapper = modelMapper;
+     *     }
+     * @param summary
+     * @param mediaType
+     * @param mediaUrl
+     * @param duration
+     * @return
+     */
     public Media createMedia(String title, String summary, String mediaType, String mediaUrl, String duration) {
         Media media = new Media();
 
         TypeMedia typeMedia = new TypeMedia();
-        typeMedia.setTitle(mediaType);
+        typeMedia = typeService.findByTitle(mediaType);
+
         media.setTitle(title);
         media.setSummary(summary);
         media.setTypeMedia(typeMedia);
