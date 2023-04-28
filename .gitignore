@@ -33,4 +33,4 @@ build/
 .vscode/
 
 ## appl
-/ressources/
+/src/main/resources/
