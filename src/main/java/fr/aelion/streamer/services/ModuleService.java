@@ -5,15 +5,19 @@ import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.Student;
+import fr.aelion.streamer.repositories.CourseRepository;
 import fr.aelion.streamer.repositories.ModuleMediaRepository;
 import fr.aelion.streamer.repositories.ModuleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,6 +30,10 @@ public class ModuleService {
     private ModelMapper modelMapper;
     @Autowired
     private CourseServiceImpl courseService;
+
+    @Autowired
+    private CourseRepository repositoryCourse;
+
     public ModuleDto add(ModuleAddDto moduleAddDto) {
         Module newModule = new Module();
         newModule.setName(moduleAddDto.getName());
@@ -75,6 +83,16 @@ public class ModuleService {
             repository.delete(aModule.get());}
         else {
             throw new NoSuchElementException();}
+    }
+
+    public void update(Module module, int id) throws Exception {
+        try {
+            Optional<Module> moduleData = repository.findById(id);
+            module.setCourse(moduleData.get().getCourse());
+            repository.save(module);
+        } catch (Exception e) {
+            throw new Exception("Something went wrong while updating Module");
+        }
     }
 
 }
