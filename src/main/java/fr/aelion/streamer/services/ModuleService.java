@@ -44,6 +44,7 @@ public class ModuleService {
         newModule.setName(moduleAddDto.getName());
         newModule.setObjective(moduleAddDto.getObjective());
         Course course = new Course();
+
         if (moduleAddDto.getCourse() != null) {
             course.setId(moduleAddDto.getCourse().getId());
             newModule.setCourse(course);
@@ -83,9 +84,10 @@ public class ModuleService {
         var aModule = repository.findById(id);
 
         if (aModule.isPresent()) {
-            repository.delete(aModule.get());}
-        else {
-            throw new NoSuchElementException();}
+            repository.delete(aModule.get());
+        } else {
+            throw new NoSuchElementException();
+        }
     }
 
     public void update(Module module, int id) throws Exception {

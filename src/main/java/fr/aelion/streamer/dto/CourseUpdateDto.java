@@ -21,6 +21,7 @@ public class CourseUpdateDto {
     private LocalDate updatedAt;
 
     private String objective;
+
     private Boolean publish;
 
     @ManyToOne(targetEntity = Student.class)

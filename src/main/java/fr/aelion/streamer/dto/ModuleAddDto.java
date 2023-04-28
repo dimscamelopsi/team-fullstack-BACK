@@ -19,6 +19,6 @@ public class ModuleAddDto {
     private Course course;
 
     private Set<MediaDto> media;
-    private Integer orderModule;
 
+    private Integer orderModule;
 }

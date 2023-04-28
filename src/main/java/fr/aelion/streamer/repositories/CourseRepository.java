@@ -22,4 +22,6 @@ public interface CourseRepository extends JpaRepository<Course, Integer> {
     @Query("SELECT s FROM Student s WHERE s.login = :login AND s.password = :password")
     Optional<Student> findByLoginAndPassword(@Param("login") String login, @Param("password") String password);
 
+    List<Course> findAllByPublishIsTrue();
+
 }

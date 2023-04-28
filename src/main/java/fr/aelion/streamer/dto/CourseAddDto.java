@@ -13,6 +13,7 @@ public class CourseAddDto {
     private String title;
 
     private String objective;
+
     private Set<ModuleDto> modules;
 
     private Student student;
