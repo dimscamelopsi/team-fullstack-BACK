@@ -5,15 +5,19 @@ import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.Student;
+import fr.aelion.streamer.repositories.CourseRepository;
 import fr.aelion.streamer.repositories.ModuleMediaRepository;
 import fr.aelion.streamer.repositories.ModuleRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -30,6 +34,10 @@ public class ModuleService {
 
     @Autowired
     private CourseServiceImpl courseService;
+
+
+    @Autowired
+    private CourseRepository repositoryCourse;
 
     public ModuleDto add(ModuleAddDto moduleAddDto) {
         Module newModule = new Module();
@@ -58,12 +66,15 @@ public class ModuleService {
      * @return
      */
     public List<ModuleDto> findAll() {
-        var modules = repository.findAll().stream().map(module -> {
-            var moduleDto = modelMapper.map(module, ModuleDto.class);
-            var medias = moduleDto.getMedias();
-            moduleDto.setTotalTime(courseService.convertToTime(medias));
-            return moduleDto;
-        }).collect(Collectors.toList());
+        var modules = repository.findAll()
+                .stream()
+                .map(module -> {
+                    var moduleDto = modelMapper.map(module, ModuleDto.class);
+                    var medias = moduleDto.getMedias();
+                    moduleDto.setTotalTime(courseService.convertToTime(medias));
+                    return moduleDto;
+                })
+                .collect(Collectors.toList());
 
         return modules;
     }
@@ -76,4 +87,15 @@ public class ModuleService {
         else {
             throw new NoSuchElementException();}
     }
+
+    public void update(Module module, int id) throws Exception {
+        try {
+            Optional<Module> moduleData = repository.findById(id);
+            module.setCourse(moduleData.get().getCourse());
+            repository.save(module);
+        } catch (Exception e) {
+            throw new Exception("Something went wrong while updating Module");
+        }
+    }
+
 }
