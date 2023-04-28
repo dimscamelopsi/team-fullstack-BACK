@@ -5,6 +5,7 @@ import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.ModuleMedia;
 import fr.aelion.streamer.repositories.ModuleMediaRepository;
 import fr.aelion.streamer.repositories.ModuleRepository;
 import org.modelmapper.ModelMapper;
@@ -78,6 +79,14 @@ public class ModuleService {
     }
     public Module getModuleById(Integer mediaId) {
         return repository.findById(mediaId).orElse(null);
+    }
+
+    public ModuleMedia addMediaToModule(Module module, Media media) {
+        ModuleMedia moduleMedia = new ModuleMedia();
+        moduleMedia.setModule(module);
+        moduleMedia.setMedia(media);
+
+        return moduleMediaRepository.save(moduleMedia);
     }
 
 }

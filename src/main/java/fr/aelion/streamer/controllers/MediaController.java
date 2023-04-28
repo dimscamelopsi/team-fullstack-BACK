@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
+import fr.aelion.streamer.entities.ModuleMedia;
+import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.services.ModuleService;
+
 
 
 @RestController
@@ -21,6 +25,8 @@ public class MediaController {
     private ModuleRepository moduleRepository;
     @Autowired
     private MediaService mediaService;
+    @Autowired
+    private ModuleService moduleService;
 
 
 
@@ -32,13 +38,14 @@ public class MediaController {
 
     @PostMapping
     public ResponseEntity<?> createMedia(
-         //  @RequestParam("moduleId") Integer moduleId,
+
+            @RequestParam(value="moduleId",required = false) Integer moduleId,
             @RequestParam("mediaType") String mediaType,
             @RequestParam("title") String title,
             @RequestParam("summary") String summary,
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam("duration") String duration,
-            @RequestParam("mediaUrl") String mediaUrl
+            @RequestParam(value="mediaUrl",required = false) String mediaUrl
 
 
     ) throws IOException {
@@ -46,7 +53,33 @@ public class MediaController {
         if (mediaType.equals("Video")) {
 
             Media media = mediaService.createMedia(title, summary, mediaType, mediaUrl, duration);
-            return ResponseEntity.status(HttpStatus.CREATED).body("add a video");
+            //Module module = moduleRepository.findById(moduleId).orElse(null);
+            if (moduleId != null) {
+
+                Module module = moduleRepository.findById(moduleId).orElse(null);
+                ModuleMedia moduleMedia = moduleService.addMediaToModule(module, media);
+               // return ResponseEntity.badRequest().body("Module not found");
+                if (moduleMedia != null) {
+
+                    return ResponseEntity.status(HttpStatus.CREATED).body("Media created and linked to the module");
+
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error linking media to module");
+                }
+            }
+
+         //   ModuleMedia moduleMedia = moduleService.addMediaToModule(module, media);
+            /**
+             *    if (moduleMedia != null) {
+             *
+             *                 return ResponseEntity.status(HttpStatus.CREATED).body("Media created and linked to the module");
+             *
+             *             } else {
+             *                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error linking media to module");
+             *             }
+              */
+            return ResponseEntity.status(HttpStatus.CREATED).body("Media created ");
+
         } else {
             if (file == null || file.isEmpty()) {
                 return ResponseEntity.badRequest().body("{\"error\": \"Le fichier est manquant ou vide\"}");
@@ -55,8 +88,20 @@ public class MediaController {
             mediaUrl = mediaService.save(file);
             Media media = mediaService.createMedia(title, summary, mediaType, mediaUrl, duration);
             // Module module = moduleRepository.findById(moduleId).orElse(null);
+            //Module module = moduleRepository.findById(moduleId).orElse(null);
+            if (moduleId  != null) {
 
-            return ResponseEntity.status(HttpStatus.CREATED).body("Media created and linked to the module");
+                Module module = moduleRepository.findById(moduleId).orElse(null);
+                ModuleMedia moduleMedia = moduleService.addMediaToModule(module, media);
+                if (moduleMedia != null) {
+                    return ResponseEntity.status(HttpStatus.CREATED).body("Media created in to the module");
+
+                } else {
+                    return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error linking media to module");
+
+                }
+            }
+            return ResponseEntity.status(HttpStatus.CREATED).body("Media created in to the module");
         }
     }
 }
