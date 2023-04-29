@@ -1,20 +1,15 @@
 package fr.aelion.streamer.services;
 
-import fr.aelion.streamer.dto.MediaAddDto;
-import fr.aelion.streamer.dto.MediaDto;
-import fr.aelion.streamer.entities.Media;
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.aelion.streamer.entities.TypeMedia;
-import fr.aelion.streamer.exceptions.message.ResponseMessage;
-import fr.aelion.streamer.repositories.MediaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
-import org.springframework.core.io.UrlResource;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -30,20 +25,62 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
+import fr.aelion.streamer.dto.MediaAddDto;
+import fr.aelion.streamer.dto.MediaDto;
+import fr.aelion.streamer.entities.Media;
+import fr.aelion.streamer.repositories.MediaRepository;
 @Service
 public class MediaService {
 
+@Autowired
+    private  MediaRepository mediaRepository;
     @Autowired
-    MediaRepository mediaRepository;
+    private  TypeMediaService typeService;
     @Autowired
     ModelMapper modelMapper;
 
     public MediaDto add(MediaAddDto media) {
+    private ModelMapper modelMapper;
+    private final Path root = Paths.get("uploads");
 
+
+    public Media createMedia(String title, String summary, String mediaType, String mediaUrl, String duration) {
+        Media media = new Media();
+
+        TypeMedia typeMedia = new TypeMedia();
+        typeMedia = typeService.findByTitle(mediaType);
+
+        media.setTitle(title);
+        media.setSummary(summary);
+        media.setTypeMedia(typeMedia);
+        media.setUrl(mediaUrl);
+        media.setDuration(Float.valueOf(duration));
+
+        return mediaRepository.save(media);
+    }
+
+
+    public List<MediaDto> findAll() {
+        List<Media> mediaList = mediaRepository.findAll();
+        return mediaList.stream()
+                .map(media -> modelMapper.map(media, MediaDto.class))
+                .collect(Collectors.toList());
+    }
+
+    public MediaDto add(MultipartFile file, String mediaAddDtoJson) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+        MediaAddDto mediaAddDto;
+        try {
+            mediaAddDto = objectMapper.readValue(mediaAddDtoJson, MediaAddDto.class);
+        } catch (IOException e) {
+            throw new RuntimeException("Failed to parse mediaAddDto JSON");
+        }
+
+        mediaAddDto.setFile(file);
 
         var newMedia = new Media();
         var newMediaType = new TypeMedia();
-        MultipartFile file = media.getFile();
 
         try {
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
@@ -54,9 +91,12 @@ public class MediaService {
             throw new RuntimeException(e.getMessage());
         }
         newMediaType.setId(media.getTypeMedia().getId());
+        newMediaType.setId(mediaAddDto.getTypeMedia().getId());
 
         newMedia = modelMapper.map(media, Media.class);
         newMediaType = modelMapper.map(media.getTypeMedia(), TypeMedia.class);
+        newMedia = modelMapper.map(mediaAddDto, Media.class);
+        newMediaType = modelMapper.map(mediaAddDto.getTypeMedia(),TypeMedia.class);
 
         newMedia.setTypeMedia(newMediaType);
 
@@ -100,6 +140,7 @@ public class MediaService {
     }
 
     public void save(MultipartFile file) {
+    public String save(MultipartFile file) {
         try {
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
         } catch (Exception e) {
@@ -109,21 +150,13 @@ public class MediaService {
 
             throw new RuntimeException(e.getMessage());
         }
-    }
+        String originalFilename = file.getOriginalFilename();
+        String[] parts = originalFilename.split("\\.");
+        String extension = parts[parts.length-1];
+        String filename = System.currentTimeMillis() + "." + extension;
 
-    public Resource load(String filename) {
-        try {
-            Path file = root.resolve(filename);
-            Resource resource = new UrlResource(file.toUri());
-
-            if (resource.exists() || resource.isReadable()) {
-                return resource;
-            } else {
-                throw new RuntimeException("Could not read the file!");
-            }
-        } catch (MalformedURLException e) {
-            throw new RuntimeException("Error: " + e.getMessage());
-        }
+        String mediaUrl = "/" + root + "/" +filename;
+        return mediaUrl;
     }
 
     public Stream<Path> loadAll() {
