@@ -5,6 +5,7 @@ import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.ModuleMedia;
 import fr.aelion.streamer.repositories.CourseRepository;
 import fr.aelion.streamer.repositories.ModuleMediaRepository;
 import fr.aelion.streamer.repositories.ModuleRepository;
@@ -97,5 +98,11 @@ public class ModuleService {
             throw new Exception("Something went wrong while updating Module");
         }
     }
+    public ModuleMedia addMediaToModule(Module module, Media media) {
+        ModuleMedia moduleMedia = new ModuleMedia();
+        moduleMedia.setModule(module);
+        moduleMedia.setMedia(media);
 
+        return moduleMediaRepository.save(moduleMedia);
+    }
 }
