@@ -11,12 +11,19 @@ import java.time.LocalDate;
 public class MediaDto {
 
     private int id;
+
     private String title;
+
     private String summary;
+
     private Float duration;
+
     private String totalTime;
+
     private LocalDate createdAt;
+
     private String url;
+
     private TypeMediaDto typeMedia;
 
 }

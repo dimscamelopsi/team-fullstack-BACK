@@ -20,8 +20,10 @@ import java.util.Optional;
 @RestController
 @RequestMapping("api/v1/course")
 public class CourseController {
+
     @Autowired
     private CourseService service;
+
     @Autowired
     private CourseRepository courseRepository;
 
@@ -43,12 +45,14 @@ public class CourseController {
         return service.findAll();
     }
 
-    @GetMapping("/managecourse/{id}") @ResponseStatus(HttpStatus.OK)
+    @GetMapping("/managecourse/{id}")
+    @ResponseStatus(HttpStatus.OK)
     public List<FullCourseDto> findCourseByLogin(@PathVariable int id) {
         try {
-            return service.getListCourseByAutor(id);}
-        catch (ConverterNotFoundException e) {
-            System.out.println("[CourseController] Error FindAutor : " + e.getMessage());}
+            return service.getListCourseByAutor(id);
+        } catch (ConverterNotFoundException e) {
+            System.out.println("[CourseController] Error FindAutor : " + e.getMessage());
+        }
         return null;
     }
 
@@ -89,5 +93,4 @@ public class CourseController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }

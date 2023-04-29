@@ -1,6 +1,5 @@
 package fr.aelion.streamer.repositories;
 
-import fr.aelion.streamer.entities.Student;
 import fr.aelion.streamer.entities.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
