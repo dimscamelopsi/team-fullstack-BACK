@@ -1,6 +1,6 @@
 package fr.aelion.streamer.services;
-import fr.aelion.streamer.dto.MediaAddDto;
 
+import fr.aelion.streamer.dto.MediaAddDto;
 import fr.aelion.streamer.dto.MediaDto;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.TypeMedia;
@@ -30,7 +30,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 
-
 @Service
 public class MediaService {
 
@@ -38,7 +37,8 @@ public class MediaService {
     MediaRepository mediaRepository;
     @Autowired
     ModelMapper modelMapper;
-    public MediaDto add(MediaAddDto media)  {
+
+    public MediaDto add(MediaAddDto media) {
 
 
         var newMedia = new Media();
@@ -53,10 +53,10 @@ public class MediaService {
             }
             throw new RuntimeException(e.getMessage());
         }
-       newMediaType.setId( media.getTypeMedia().getId());
+        newMediaType.setId(media.getTypeMedia().getId());
 
         newMedia = modelMapper.map(media, Media.class);
-        newMediaType = modelMapper.map(media.getTypeMedia(),TypeMedia.class);
+        newMediaType = modelMapper.map(media.getTypeMedia(), TypeMedia.class);
 
         newMedia.setTypeMedia(newMediaType);
 
@@ -66,13 +66,13 @@ public class MediaService {
     }
 
 
-
     public List<MediaDto> findAll() {
         return mediaRepository.findAll()
                 .stream()
                 .map(media -> modelMapper.map(media, MediaDto.class))
                 .collect(Collectors.toList());
     }
+
     @PostMapping("/uploadFile")
     public ResponseEntity<ResponseMessage> uploadFile(@RequestParam("file") MultipartFile file) {
         String message = "";
@@ -88,6 +88,7 @@ public class MediaService {
     }
 
     private final Path root = Paths.get("uploads");
+
     public void init(String mediaUrl) {
         try {
             URL url = new URL(mediaUrl);
@@ -96,7 +97,7 @@ public class MediaService {
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
-}
+    }
 
     public void save(MultipartFile file) {
         try {
@@ -124,6 +125,7 @@ public class MediaService {
             throw new RuntimeException("Error: " + e.getMessage());
         }
     }
+
     public Stream<Path> loadAll() {
         try {
             return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
@@ -131,5 +133,4 @@ public class MediaService {
             throw new RuntimeException("Could not load the files!");
         }
     }
-
 }

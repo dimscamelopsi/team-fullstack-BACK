@@ -49,5 +49,4 @@ public class ModuleController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
 }
