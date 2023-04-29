@@ -40,19 +40,19 @@ public class MediaController {
     public ResponseEntity<?> createMedia(
 
             @RequestParam(value="moduleId",required = false) Integer moduleId,
-            @RequestParam("mediaType") String mediaType,
+            @RequestParam("typeMedia") String typeMedia,
             @RequestParam("title") String title,
             @RequestParam("summary") String summary,
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam("duration") String duration,
-            @RequestParam(value="mediaUrl",required = false) String mediaUrl
+            @RequestParam(value="url",required = false) String url
 
 
     ) throws IOException {
 
-        if (mediaType.equals("Video")) {
+        if (typeMedia.equals("Video")) {
 
-            Media media = mediaService.createMedia(title, summary, mediaType, mediaUrl, duration);
+            Media media = mediaService.createMedia(title, summary, typeMedia, url, duration);
             //Module module = moduleRepository.findById(moduleId).orElse(null);
             if (moduleId != null) {
 
@@ -75,8 +75,8 @@ public class MediaController {
                 return ResponseEntity.badRequest().body("{\"error\": \"Le fichier est manquant ou vide\"}");
             }
 
-            mediaUrl = mediaService.save(file);
-            Media media = mediaService.createMedia(title, summary, mediaType, mediaUrl, duration);
+            url = mediaService.save(file);
+            Media media = mediaService.createMedia(title, summary, typeMedia, url, duration);
             // Module module = moduleRepository.findById(moduleId).orElse(null);
             //Module module = moduleRepository.findById(moduleId).orElse(null);
             if (moduleId  != null) {
