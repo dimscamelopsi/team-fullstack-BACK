@@ -11,6 +11,7 @@ import java.util.List;
 @Getter
 @Setter
 public class TypeMedia {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

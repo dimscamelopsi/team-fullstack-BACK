@@ -1,5 +1,6 @@
 package fr.aelion.streamer.services;
 import fr.aelion.streamer.dto.MediaAddDto;
+
 import fr.aelion.streamer.dto.MediaDto;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.TypeMedia;
@@ -32,6 +33,7 @@ import java.util.stream.Stream;
 
 @Service
 public class MediaService {
+
     @Autowired
     MediaRepository mediaRepository;
     @Autowired
