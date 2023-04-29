@@ -68,16 +68,6 @@ public class MediaController {
                 }
             }
 
-         //   ModuleMedia moduleMedia = moduleService.addMediaToModule(module, media);
-            /**
-             *    if (moduleMedia != null) {
-             *
-             *                 return ResponseEntity.status(HttpStatus.CREATED).body("Media created and linked to the module");
-             *
-             *             } else {
-             *                 return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error linking media to module");
-             *             }
-              */
             return ResponseEntity.status(HttpStatus.CREATED).body("Media created ");
 
         } else {
