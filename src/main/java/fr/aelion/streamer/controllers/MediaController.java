@@ -2,28 +2,23 @@ package fr.aelion.streamer.controllers;
 
 import fr.aelion.streamer.dto.MediaDto;
 import fr.aelion.streamer.entities.Media;
+import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.ModuleMedia;
 import fr.aelion.streamer.repositories.ModuleRepository;
 import fr.aelion.streamer.services.MediaService;
+import fr.aelion.streamer.services.ModuleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.util.LinkedMultiValueMap;
-import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
-
 import org.springframework.web.multipart.MultipartFile;
+
 import java.io.IOException;
 import java.util.List;
-import fr.aelion.streamer.entities.ModuleMedia;
-import fr.aelion.streamer.entities.Module;
-import fr.aelion.streamer.services.ModuleService;
-
-
 
 @RestController
 @RequestMapping("api/v1/media")
 public class MediaController {
-
 
     @Autowired
     private ModuleRepository moduleRepository;
@@ -31,8 +26,6 @@ public class MediaController {
     private MediaService mediaService;
     @Autowired
     private ModuleService moduleService;
-
-
 
     @GetMapping("")
     public ResponseEntity<List<MediaDto>> getAllMedia() {
@@ -42,7 +35,6 @@ public class MediaController {
 
     @PostMapping
     public ResponseEntity<?> createMedia(
-
             @RequestParam(value="moduleId",required = false) Integer moduleId,
             @RequestParam("typeMedia") String typeMedia,
             @RequestParam("title") String title,
@@ -50,12 +42,8 @@ public class MediaController {
             @RequestParam(value = "file", required = false) MultipartFile file,
             @RequestParam("duration") String duration,
             @RequestParam(value="url",required = false) String url
-
-
     ) throws IOException {
-
         if (typeMedia.equals("Video")) {
-
             Media media = mediaService.createMedia(title, summary, typeMedia, url, duration);
             //Module module = moduleRepository.findById(moduleId).orElse(null);
             if (moduleId != null) {
