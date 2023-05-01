@@ -40,12 +40,12 @@ public class ModuleService {
         if (moduleAddDto.getMedia() != null) {
             List<Media> medias = new ArrayList<>();
             moduleAddDto.getMedia().forEach(mDto -> {
-
                 var media = modelMapper.map(mDto, Media.class);
                 medias.add(media);
             });
             newModule.setMedias(medias);
-
+        }else{
+            newModule.setMedias(null);
         }
         newModule = repository.save(newModule);
 
