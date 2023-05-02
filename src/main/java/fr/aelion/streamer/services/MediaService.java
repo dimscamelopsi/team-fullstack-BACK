@@ -1,4 +1,5 @@
 package fr.aelion.streamer.services;
+
 import fr.aelion.streamer.dto.MediaDto;
 import fr.aelion.streamer.repositories.MediaRepository;
 import org.modelmapper.ModelMapper;
@@ -10,8 +11,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class MediaService {
+
     @Autowired
     private MediaRepository mediaRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -21,6 +24,4 @@ public class MediaService {
                 .map(media -> modelMapper.map(media, MediaDto.class))
                 .collect(Collectors.toList());
     }
-
-
 }

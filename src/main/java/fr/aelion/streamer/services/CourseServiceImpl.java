@@ -21,8 +21,10 @@ import java.util.stream.Collectors;
 
 @Service
 public class CourseServiceImpl implements CourseService {
+
     @Autowired
     private CourseRepository repository;
+
     @Autowired
     private StudentRepository studentRepository;
 
@@ -34,6 +36,7 @@ public class CourseServiceImpl implements CourseService {
 
     @Autowired
     private ModuleRepository moduleRepository;
+
     @Autowired
     private ModelMapper modelMapper;
 
@@ -106,7 +109,6 @@ public class CourseServiceImpl implements CourseService {
         } else {
             throw new NoSuchElementException();
         }
-
     }
 
     @Override
@@ -115,7 +117,7 @@ public class CourseServiceImpl implements CourseService {
         newCourse.setTitle(course.getTitle());
         newCourse.setObjective(course.getObjective());
         newCourse.setStudent(course.getStudent());
-
+        newCourse.setPublish(course.getPublish());
         newCourse = repository.save(newCourse);
 
         if (course.getModules().size() > 0) {
@@ -124,6 +126,14 @@ public class CourseServiceImpl implements CourseService {
             course.getModules().forEach(mDto -> {
                 var module = modelMapper.map(mDto, Module.class);
                 module.setCourse(finalNewCourse);
+                if (mDto.getMedias() != null) {
+                    List<Media> medias = new ArrayList<>();
+                    mDto.getMedias().forEach(meDto -> {
+                        var media = modelMapper.map(meDto, Media.class);
+                        medias.add(media);
+                    });
+                    module.setMedias(medias);
+                }
                 module = moduleRepository.save(module);
                 courseModules.add(module);
             });
@@ -144,12 +154,11 @@ public class CourseServiceImpl implements CourseService {
         var timeAsLong = Math.round(time);
 
         return LocalTime.MIN.plusSeconds(timeAsLong).toString();
-
     }
 
     /**
      * Returned all courses associated with a user
-     * 
+     *
      * @return
      */
     public List<CourseUserDto> findCoursesByStudent(int id) {
@@ -183,5 +192,4 @@ public class CourseServiceImpl implements CourseService {
             throw new Exception("Something went wrong while updating Student");
         }
     }
-
 }

@@ -12,6 +12,7 @@ import java.util.List;
 @Getter
 @Setter
 public class Media {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", nullable = false)

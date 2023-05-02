@@ -10,11 +10,16 @@ import java.util.Set;
 @Getter
 @Setter
 public class ModuleAddDto {
+
     private String name;
+
     private String objective;
+
     @Column(nullable = false)
     private Course course;
+
     private Set<MediaDto> media;
     private Integer orderMedia;
 
+    private Integer orderModule;
 }

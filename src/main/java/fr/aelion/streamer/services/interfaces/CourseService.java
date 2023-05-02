@@ -1,7 +1,6 @@
 package fr.aelion.streamer.services.interfaces;
 
 import fr.aelion.streamer.dto.CourseAddDto;
-import fr.aelion.streamer.dto.CourseUpdateDto;
 import fr.aelion.streamer.dto.CourseUserDto;
 import fr.aelion.streamer.dto.FullCourseDto;
 import fr.aelion.streamer.entities.Course;

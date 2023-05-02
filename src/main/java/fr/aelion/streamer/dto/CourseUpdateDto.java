@@ -8,15 +8,20 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
-@Getter @Setter
+@Getter
+@Setter
 public class CourseUpdateDto {
+
     private int id;
+
     private String title;
+
     private LocalDate createdAt;
 
     private LocalDate updatedAt;
 
     private String objective;
+
     private Boolean publish;
 
     @ManyToOne(targetEntity = Student.class)

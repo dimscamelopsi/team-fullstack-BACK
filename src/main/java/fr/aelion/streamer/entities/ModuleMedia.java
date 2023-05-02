@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Table(name = "module_media")
 public class ModuleMedia {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
