@@ -5,6 +5,7 @@ import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
 import fr.aelion.streamer.entities.Module;
+import fr.aelion.streamer.entities.ModuleMedia;
 import fr.aelion.streamer.repositories.ModuleMediaRepository;
 import fr.aelion.streamer.repositories.ModuleRepository;
 import org.modelmapper.ModelMapper;
@@ -31,6 +32,8 @@ public class ModuleService {
         newModule.setName(moduleAddDto.getName());
         newModule.setObjective(moduleAddDto.getObjective());
         Course course = new Course();
+
+        List<Media> medias = new ArrayList<>();
         if (moduleAddDto.getCourse() != null) {
             course.setId(moduleAddDto.getCourse().getId());
             newModule.setCourse(course);
@@ -38,16 +41,26 @@ public class ModuleService {
             newModule.setCourse(null);
         }
         if (moduleAddDto.getMedia() != null) {
-            List<Media> medias = new ArrayList<>();
+            ModuleMedia moduleMedia=new ModuleMedia();
             moduleAddDto.getMedia().forEach(mDto -> {
                 var media = modelMapper.map(mDto, Media.class);
                 medias.add(media);
+                moduleMedia.setOrderMedia(media.getOrderMedia());
             });
             newModule.setMedias(medias);
         }else{
             newModule.setMedias(null);
         }
         newModule = repository.save(newModule);
+        Module finalNewModule = newModule;
+
+        medias.forEach((m)->{
+            ModuleMedia mTm = new ModuleMedia();
+            mTm.setModule(finalNewModule);
+            mTm.setMedia(m);
+            mTm.setOrderMedia(m.getOrderMedia());
+            mTm = moduleMediaRepository.save(mTm);
+        });
 
         return modelMapper.map(newModule, ModuleDto.class);
     }

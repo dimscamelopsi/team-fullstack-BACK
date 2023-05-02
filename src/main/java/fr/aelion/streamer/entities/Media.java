@@ -39,5 +39,6 @@ public class Media {
     public Media() {
         createdAt = LocalDate.now();
     }
+    private Integer orderMedia;
 
 }

@@ -16,4 +16,5 @@ public class MediaDto {
     private LocalDate createdAt;
     private String url;
     private TypeMediaDto typeMedia;
+    private Integer orderMedia;
 }
