@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -17,9 +18,16 @@ public class ModuleController {
     private ModuleService service;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ModuleDto> add(@RequestBody ModuleAddDto module) {
-        ModuleDto moduleDto = this.service.add(module);
-        return ResponseEntity.ok(moduleDto);
+        try {
+            ModuleDto moduleDto = this.service.add(module);
+            return ResponseEntity.ok(moduleDto);
+        } catch (NoSuchElementException e) {
+
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @GetMapping
