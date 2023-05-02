@@ -1,6 +1,7 @@
 package fr.aelion.streamer.services;
 
 import fr.aelion.streamer.dto.ModuleAddDto;
+import fr.aelion.streamer.dto.ModuleByPersonDto;
 import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
@@ -113,5 +114,19 @@ public class ModuleService {
             throw new Exception("Something went wrong while updating Module");
         }
     }
+
+    public List<ModuleByPersonDto> findAllModulesByPersonId(int id) throws Exception {
+        try{
+            var modules = repository.getListModuleByPersonId(id).stream()
+                    .map(module -> {
+                        var moduleDto = modelMapper.map(module, ModuleByPersonDto.class);
+                        return moduleDto;
+                    }).collect(Collectors.toList());
+            return modules;
+        }catch (Exception e){
+            throw new Exception("An error occurred in the method findAllModulesByPersonId "+ e.getMessage());
+        }
+    }
+
 
 }
