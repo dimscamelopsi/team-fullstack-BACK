@@ -41,7 +41,7 @@ public class CourseServiceImpl implements CourseService {
     private ModelMapper modelMapper;
 
     public List<FullCourseDto> findAll() {
-        var fullCourses = repository.findAll()
+        var fullCourses = repository.findAllByPublishIsTrue()
                 .stream()
                 .map(c -> {
                     var fullCourseDto = modelMapper.map(c, FullCourseDto.class);
