@@ -1,6 +1,7 @@
 package fr.aelion.streamer.services;
 
 import fr.aelion.streamer.dto.ModuleAddDto;
+import fr.aelion.streamer.dto.ModuleByPersonDto;
 import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Course;
 import fr.aelion.streamer.entities.Media;
@@ -44,20 +45,36 @@ public class ModuleService {
         newModule.setObjective(moduleAddDto.getObjective());
         Course course = new Course();
 
+
+
+        List<Media> medias = new ArrayList<>();
         if (moduleAddDto.getCourse() != null) {
             course.setId(moduleAddDto.getCourse().getId());
             newModule.setCourse(course);
+        }else{
+            newModule.setCourse(null);
         }
         if (moduleAddDto.getMedia() != null) {
-            List<Media> medias = new ArrayList<>();
+            ModuleMedia moduleMedia=new ModuleMedia();
             moduleAddDto.getMedia().forEach(mDto -> {
-
                 var media = modelMapper.map(mDto, Media.class);
                 medias.add(media);
+                moduleMedia.setOrderMedia(media.getOrderMedia());
             });
             newModule.setMedias(medias);
+        }else{
+            newModule.setMedias(null);
         }
         newModule = repository.save(newModule);
+        Module finalNewModule = newModule;
+
+        medias.forEach((m)->{
+            ModuleMedia mTm = new ModuleMedia();
+            mTm.setModule(finalNewModule);
+            mTm.setMedia(m);
+            mTm.setOrderMedia(m.getOrderMedia());
+            mTm = moduleMediaRepository.save(mTm);
+        });
 
         return modelMapper.map(newModule, ModuleDto.class);
     }
@@ -86,6 +103,33 @@ public class ModuleService {
             repository.delete(aModule.get());
         } else {
             throw new NoSuchElementException();
+        }
+            repository.delete(aModule.get());
+        } else {
+            throw new NoSuchElementException();
+        }
+    }
+
+    public void update(Module module, int id) throws Exception {
+        try {
+            Optional<Module> moduleData = repository.findById(id);
+            module.setCourse(moduleData.get().getCourse());
+            repository.save(module);
+        } catch (Exception e) {
+            throw new Exception("Something went wrong while updating Module");
+        }
+    }
+
+    public List<ModuleByPersonDto> findAllModulesByPersonId(int id) throws Exception {
+        try{
+            var modules = repository.getListModuleByPersonId(id).stream()
+                    .map(module -> {
+                        var moduleDto = modelMapper.map(module, ModuleByPersonDto.class);
+                        return moduleDto;
+                    }).collect(Collectors.toList());
+            return modules;
+        }catch (Exception e){
+            throw new Exception("An error occurred in the method findAllModulesByPersonId "+ e.getMessage());
         }
     }
 

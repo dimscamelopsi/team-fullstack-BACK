@@ -1,6 +1,7 @@
 package fr.aelion.streamer.controllers;
 
 import fr.aelion.streamer.dto.ModuleAddDto;
+import fr.aelion.streamer.dto.ModuleByPersonDto;
 import fr.aelion.streamer.dto.ModuleDto;
 import fr.aelion.streamer.entities.Module;
 import fr.aelion.streamer.services.ModuleService;
@@ -20,14 +21,30 @@ public class ModuleController {
     private ModuleService service;
 
     @PostMapping
+    @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<ModuleDto> add(@RequestBody ModuleAddDto module) {
-        ModuleDto moduleDto = this.service.add(module);
-        return ResponseEntity.ok(moduleDto);
+        try {
+            ModuleDto moduleDto = this.service.add(module);
+            return ResponseEntity.ok(moduleDto);
+        } catch (NoSuchElementException e) {
+
+            return ResponseEntity.notFound().build();
+        }
+
     }
 
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ModuleDto> findAll() {return service.findAll();}
+
+    @GetMapping("/{id}") @ResponseStatus(HttpStatus.OK)
+    public List<ModuleByPersonDto> findModuleByCourseAndPersonId(@PathVariable int id) throws Exception {
+        try{
+            return service.findAllModulesByPersonId(id);
+        }catch (Exception e){
+            throw new Exception("An error occurred in the method ModuleControler: "+ e.getMessage());
+        }
+    }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> remove(@PathVariable() int id) {

@@ -26,4 +26,5 @@ public class MediaDto {
 
     private TypeMediaDto typeMedia;
 
+    private Integer orderMedia;
 }

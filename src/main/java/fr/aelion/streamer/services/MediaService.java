@@ -25,6 +25,7 @@ public class MediaService {
 
     @Autowired
     private MediaRepository mediaRepository;
+
     @Autowired
     private TypeMediaService typeService;
     @Autowired
