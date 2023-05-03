@@ -46,29 +46,28 @@ public class ModuleService {
         Course course = new Course();
 
 
-
         List<Media> medias = new ArrayList<>();
         if (moduleAddDto.getCourse() != null) {
             course.setId(moduleAddDto.getCourse().getId());
             newModule.setCourse(course);
-        }else{
+        } else {
             newModule.setCourse(null);
         }
         if (moduleAddDto.getMedia() != null) {
-            ModuleMedia moduleMedia=new ModuleMedia();
+            ModuleMedia moduleMedia = new ModuleMedia();
             moduleAddDto.getMedia().forEach(mDto -> {
                 var media = modelMapper.map(mDto, Media.class);
                 medias.add(media);
                 moduleMedia.setOrderMedia(media.getOrderMedia());
             });
             newModule.setMedias(medias);
-        }else{
+        } else {
             newModule.setMedias(null);
         }
         newModule = repository.save(newModule);
         Module finalNewModule = newModule;
 
-        medias.forEach((m)->{
+        medias.forEach((m) -> {
             ModuleMedia mTm = new ModuleMedia();
             mTm.setModule(finalNewModule);
             mTm.setMedia(m);
@@ -83,15 +82,12 @@ public class ModuleService {
      * @return
      */
     public List<ModuleDto> findAll() {
-        var modules = repository.findAll()
-                .stream()
-                .map(module -> {
-                    var moduleDto = modelMapper.map(module, ModuleDto.class);
-                    var medias = moduleDto.getMedias();
-                    moduleDto.setTotalTime(courseService.convertToTime(medias));
-                    return moduleDto;
-                })
-                .collect(Collectors.toList());
+        var modules = repository.findAll().stream().map(module -> {
+            var moduleDto = modelMapper.map(module, ModuleDto.class);
+            var medias = moduleDto.getMedias();
+            moduleDto.setTotalTime(courseService.convertToTime(medias));
+            return moduleDto;
+        }).collect(Collectors.toList());
 
         return modules;
     }
@@ -104,32 +100,17 @@ public class ModuleService {
         } else {
             throw new NoSuchElementException();
         }
-            repository.delete(aModule.get());
-        } else {
-            throw new NoSuchElementException();
-        }
-    }
-
-    public void update(Module module, int id) throws Exception {
-        try {
-            Optional<Module> moduleData = repository.findById(id);
-            module.setCourse(moduleData.get().getCourse());
-            repository.save(module);
-        } catch (Exception e) {
-            throw new Exception("Something went wrong while updating Module");
-        }
     }
 
     public List<ModuleByPersonDto> findAllModulesByPersonId(int id) throws Exception {
-        try{
-            var modules = repository.getListModuleByPersonId(id).stream()
-                    .map(module -> {
-                        var moduleDto = modelMapper.map(module, ModuleByPersonDto.class);
-                        return moduleDto;
-                    }).collect(Collectors.toList());
+        try {
+            var modules = repository.getListModuleByPersonId(id).stream().map(module -> {
+                var moduleDto = modelMapper.map(module, ModuleByPersonDto.class);
+                return moduleDto;
+            }).collect(Collectors.toList());
             return modules;
-        }catch (Exception e){
-            throw new Exception("An error occurred in the method findAllModulesByPersonId "+ e.getMessage());
+        } catch (Exception e) {
+            throw new Exception("An error occurred in the method findAllModulesByPersonId " + e.getMessage());
         }
     }
 
@@ -142,6 +123,7 @@ public class ModuleService {
             throw new Exception("Something went wrong while updating Module");
         }
     }
+
     public ModuleMedia addMediaToModule(Module module, Media media) {
         ModuleMedia moduleMedia = new ModuleMedia();
         moduleMedia.setModule(module);

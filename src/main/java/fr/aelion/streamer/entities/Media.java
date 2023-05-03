@@ -37,6 +37,8 @@ public class Media {
     @ManyToMany(mappedBy = "medias")
     private List<Module> modules;
 
+    private Integer orderMedia;
+
     public Media() {
         createdAt = LocalDate.now();
     }
