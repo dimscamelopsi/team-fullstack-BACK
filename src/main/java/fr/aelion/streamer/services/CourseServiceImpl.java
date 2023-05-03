@@ -124,8 +124,11 @@ public class CourseServiceImpl implements CourseService {
             Course finalNewCourse = newCourse;
             Set<Module> courseModules = new HashSet<>();
             course.getModules().forEach(mDto -> {
-                var module = modelMapper.map(mDto, Module.class);
+                Module module = new Module();
                 module.setCourse(finalNewCourse);
+                module.setName(mDto.getName());
+                module.setObjective(mDto.getObjective());
+                module.setOrderModule(mDto.getOrderModule());
                 if (mDto.getMedias() != null) {
                     List<Media> medias = new ArrayList<>();
                     mDto.getMedias().forEach(meDto -> {
