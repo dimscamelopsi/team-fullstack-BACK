@@ -30,6 +30,7 @@ public class MediaService {
     private TypeMediaService typeService;
     @Autowired
     private ModelMapper modelMapper;
+
     private final Path root = Paths.get("uploads");
 
     public Media createMedia(String title, String summary, String mediaType, String mediaUrl, String duration) {
@@ -54,17 +55,17 @@ public class MediaService {
                 .collect(Collectors.toList());
     }
 
-    public void init(String mediaUrl) {
+    public void init() {
         try {
-            URL url = new URL(mediaUrl);
-            InputStream in = url.openStream();
-            Files.copy(in, this.root.resolve(url.getFile()));
+            Files.createDirectories(root);
         } catch (IOException e) {
             throw new RuntimeException("Could not initialize folder for upload!");
         }
     }
 
     public String save(MultipartFile file) {
+        init();
+
         try {
             Files.copy(file.getInputStream(), this.root.resolve(file.getOriginalFilename()));
         } catch (Exception e) {
