@@ -126,8 +126,11 @@ public class CourseServiceImpl implements CourseService {
             Course finalNewCourse = newCourse;
             Set<Module> courseModules = new HashSet<>();
             course.getModules().forEach(mDto -> {
-                var module = modelMapper.map(mDto, Module.class);
+                Module module = new Module();
                 module.setCourse(finalNewCourse);
+                module.setName(mDto.getName());
+                module.setObjective(mDto.getObjective());
+                module.setOrderModule(mDto.getOrderModule());
                 if (mDto.getMedias() != null) {
                     List<Media> medias = new ArrayList<>();
                     mDto.getMedias().forEach(meDto -> {
@@ -156,11 +159,12 @@ public class CourseServiceImpl implements CourseService {
         var timeAsLong = Math.round(time);
 
         return LocalTime.MIN.plusSeconds(timeAsLong).toString();
+
     }
 
     /**
      * Returned all courses associated with a user
-     *
+     * 
      * @return
      */
     public List<CourseUserDto> findCoursesByStudent(int id) {
@@ -194,4 +198,5 @@ public class CourseServiceImpl implements CourseService {
             throw new Exception("Something went wrong while updating Student");
         }
     }
+
 }
