@@ -9,6 +9,7 @@ import lombok.Setter;
 @Setter
 @Table(name = "module_media")
 public class ModuleMedia {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -20,4 +21,5 @@ public class ModuleMedia {
     @ManyToOne
     @JoinColumn(name = "media_id")
     private Media media;
+    private Integer orderMedia;
 }

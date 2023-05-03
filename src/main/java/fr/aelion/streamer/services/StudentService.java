@@ -15,6 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 public class StudentService {
+
     @Autowired
     private StudentRepository repository;
 
@@ -91,16 +92,15 @@ public class StudentService {
 
     public Set<Integer> multipleDelete(Set<Integer> ids) {
         var nonDeletedIds = new HashSet<Integer>();
-        ids.stream()
-                .forEach(i -> {
-                    try {
-                        repository.delete(this.findOne(i));
-                    } catch (NoSuchElementException e) {
-                        nonDeletedIds.add(i);
-                    } catch (Exception e) {
-                        nonDeletedIds.add(i);
-                    }
-                });
+        ids.stream().forEach(i -> {
+            try {
+                repository.delete(this.findOne(i));
+            } catch (NoSuchElementException e) {
+                nonDeletedIds.add(i);
+            } catch (Exception e) {
+                nonDeletedIds.add(i);
+            }
+        });
         return nonDeletedIds;
     }
 
