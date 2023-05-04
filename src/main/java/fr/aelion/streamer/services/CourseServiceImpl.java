@@ -13,7 +13,9 @@ import fr.aelion.streamer.services.interfaces.CourseService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.*;
@@ -40,6 +42,9 @@ public class CourseServiceImpl implements CourseService {
     @Autowired
     private ModelMapper modelMapper;
 
+    @Autowired
+    MediaService mediaService;
+
     public List<FullCourseDto> findAll() {
         var fullCourses = repository.findAllByPublishIsTrue()
                 .stream()
@@ -53,6 +58,20 @@ public class CourseServiceImpl implements CourseService {
             for (ModuleDto m : fc.getModules()) {
                 var medias = m.getMedias();
                 m.setTotalTime(convertToTime(medias));
+
+                for (MediaDto mediaDto: medias) {
+                    if ( mediaDto.getUrl().contains(".pdf")){
+                        System.out.println(mediaDto.getUrl());
+                        try {
+                            mediaDto.setFile2( mediaService.load(mediaDto.getUrl()).getFile());
+                            System.out.println(mediaDto.getUrl());
+                        } catch ( IOException e){
+                            throw new RuntimeException("Error: " + e.getMessage());
+                        }
+
+                    }
+
+                }
             }
         }
         return fullCourses;
@@ -73,6 +92,20 @@ public class CourseServiceImpl implements CourseService {
             for (ModuleDto m : fc.getModules()) {
                 var medias = m.getMedias();
                 m.setTotalTime(convertToTime(medias));
+                for (MediaDto mediaDto: medias) {
+
+                    if ( mediaDto.getUrl().contains("/.pdf/")){
+                        System.out.println(mediaDto.getUrl());
+                        try {
+                            mediaDto.setFile2( mediaService.load(mediaDto.getUrl()).getFile());
+                            System.out.println(mediaDto.getUrl());
+                        } catch ( IOException e){
+                            throw new RuntimeException("Error: " + e.getMessage());
+                        }
+
+                    }
+
+                }
             }
         }
         return listCoursesManage;

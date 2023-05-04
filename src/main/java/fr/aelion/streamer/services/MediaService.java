@@ -6,12 +6,13 @@ import fr.aelion.streamer.entities.TypeMedia;
 import fr.aelion.streamer.repositories.MediaRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.UrlResource;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.URL;
+import java.net.MalformedURLException;
 import java.nio.file.FileAlreadyExistsException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -80,7 +81,7 @@ public class MediaService {
         String extension = parts[parts.length - 1];
         String filename = System.currentTimeMillis() + "." + extension;
 
-        String mediaUrl = "/" + root + "/" + filename;
+        String mediaUrl = originalFilename;
         return mediaUrl;
     }
 
@@ -89,6 +90,25 @@ public class MediaService {
             return Files.walk(this.root, 1).filter(path -> !path.equals(this.root)).map(this.root::relativize);
         } catch (IOException e) {
             throw new RuntimeException("Could not load the files!");
+        }
+    }
+
+    public Resource load(String fileName) {
+        try {
+        /*    String newFile = fileName.substring(9);
+            int extensionIndex = newFile.lastIndexOf(".");
+            newFile = newFile.substring(0, extensionIndex);
+            System.out.println("####### "+newFile);*/
+            Path file = root.resolve(fileName);
+            Resource resource = new UrlResource(file.toUri());
+
+            if (resource.exists() || resource.isReadable()) {
+                return resource;
+            } else {
+                throw new RuntimeException("Could not read the file!");
+            }
+        } catch (MalformedURLException e) {
+            throw new RuntimeException("Error: " + e.getMessage());
         }
     }
 }
