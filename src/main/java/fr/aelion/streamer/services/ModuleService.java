@@ -53,17 +53,19 @@ public class ModuleService {
             newModule.setCourse(null);
         }
         if (moduleAddDto.getMedia() != null) {
-            ModuleMedia moduleMedia=new ModuleMedia();
+            //ModuleMedia moduleMedia=new ModuleMedia();
             moduleAddDto.getMedia().forEach(mDto -> {
                 var media = modelMapper.map(mDto, Media.class);
                 medias.add(media);
-                moduleMedia.setOrderMedia(media.getOrderMedia());
+                //moduleMedia.setOrderMedia(media.getOrderMedia());
             });
-            newModule.setMedias(medias);
+            //newModule.setMedias(medias);
         }else{
             newModule.setMedias(null);
         }
         newModule = repository.save(newModule);
+        //var newModuleId=newModule.getId();
+        //System.out.println(newModuleId);
         Module finalNewModule = newModule;
 
         medias.forEach((m)->{
