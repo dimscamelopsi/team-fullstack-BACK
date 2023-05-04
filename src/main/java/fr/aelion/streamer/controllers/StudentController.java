@@ -30,6 +30,16 @@ public class StudentController {
         return studentService.findAll();
     }
 
+    @GetMapping("dto/{id}")
+    public ResponseEntity<?> findOneStudent(@PathVariable int id){
+
+        try {
+            return ResponseEntity.ok(studentService.findOneStudent(id));
+        } catch (NoSuchElementException e) {
+            return new ResponseEntity<>("Student with " + id + " was not found", HttpStatus.NOT_FOUND);
+        }
+    }
+
     @GetMapping("{id}") // GET http://127.0.0.1:5000/api/v1/students/1
     public ResponseEntity<?> findOne(@PathVariable int id) {
         try {
