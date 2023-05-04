@@ -81,6 +81,15 @@ public class StudentService {
                 .orElseThrow();
     }
 
+    public StudentDto findOneStudent(int id) {
+        return repository.findById(id)
+                .map(s -> {
+                    StudentDto studentDto = modelMapper.map(s, StudentDto.class);
+                    return studentDto;
+                })
+                .orElseThrow();
+    }
+
     public void delete(int id) {
         try {
             var student = this.findOne(id);
