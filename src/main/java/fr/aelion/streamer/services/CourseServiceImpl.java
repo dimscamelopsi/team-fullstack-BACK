@@ -198,16 +198,13 @@ public class CourseServiceImpl implements CourseService {
      * @return
      */
     public List<CourseUserDto> findCoursesByStudent(int id) {
-        // TODO : Trouver la liste des courses a partir de ID de Student/User
         Student currentUser = studentService.findOne(id);
         // System.out.println(currentUser.getId());
         List<Course> coursesList = new ArrayList<>();
-        // TODO MAP
         try {
             coursesList = repository.findAllCourseUsersNative(currentUser.getId());
-            // System.out.println(coursesList);
+
         } catch (Exception e) {
-            // System.out.println(e);
         }
         List<CourseUserDto> newCoursList = new ArrayList<>();
         coursesList.stream().map(
