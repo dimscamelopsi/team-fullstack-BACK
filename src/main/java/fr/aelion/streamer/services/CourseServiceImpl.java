@@ -41,7 +41,7 @@ public class CourseServiceImpl implements CourseService {
     private ModelMapper modelMapper;
 
     public List<FullCourseDto> findAll() {
-        var fullCourses = repository.findAll()
+        var fullCourses = repository.findAllByPublishIsTrue()
                 .stream()
                 .map(c -> {
                     var fullCourseDto = modelMapper.map(c, FullCourseDto.class);
@@ -61,7 +61,6 @@ public class CourseServiceImpl implements CourseService {
     @Override
     public List<FullCourseDto> getListCourseByAutor(int id) {
         Optional<Student> student = studentRepository.findById(id);
-        System.out.println("#######   getListCourseByAutor : " + student.get().getId());
 
         var listCoursesManage = repository.findByPersonneId(student.get().getId())
                 .stream()
@@ -70,7 +69,6 @@ public class CourseServiceImpl implements CourseService {
                     return fullCourseDto;
                 }).collect(Collectors.toList());
 
-        System.out.println("#######   getListCourseByAutor :" + listCoursesManage);
         for (FullCourseDto fc : listCoursesManage) {
             for (ModuleDto m : fc.getModules()) {
                 var medias = m.getMedias();
@@ -126,8 +124,11 @@ public class CourseServiceImpl implements CourseService {
             Course finalNewCourse = newCourse;
             Set<Module> courseModules = new HashSet<>();
             course.getModules().forEach(mDto -> {
-                var module = modelMapper.map(mDto, Module.class);
+                Module module = new Module();
                 module.setCourse(finalNewCourse);
+                module.setName(mDto.getName());
+                module.setObjective(mDto.getObjective());
+                module.setOrderModule(mDto.getOrderModule());
                 if (mDto.getMedias() != null) {
                     List<Media> medias = new ArrayList<>();
                     mDto.getMedias().forEach(meDto -> {

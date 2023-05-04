@@ -9,18 +9,9 @@ import java.util.Set;
 
 @Getter
 @Setter
-public class ModuleAddDto {
-
+public class ModuleByPersonDto {
     private String name;
-
     private String objective;
-
-    @Column(nullable = false)
-    private Course course;
-
-    private Set<MediaDto> media;
-
-    private Integer orderMedia;
-
-    private Integer orderModule;
+    private int courseId;
+    private int orderModule;
 }

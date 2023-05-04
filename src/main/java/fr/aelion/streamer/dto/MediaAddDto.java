@@ -4,27 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.time.LocalDate;
-
 @Getter
 @Setter
-public class MediaDto {
-
-    private int id;
+public class MediaAddDto {
 
     private String title;
-
     private String summary;
-
     private Float duration;
 
-    private String totalTime;
-
-    private LocalDate createdAt;
-
     private String url;
-
     private TypeMediaDto typeMedia;
-
-    private Integer orderMedia;
+    private MultipartFile file;
 }

@@ -21,4 +21,5 @@ public class ModuleMedia {
     @ManyToOne
     @JoinColumn(name = "media_id")
     private Media media;
+    private Integer orderMedia;
 }
